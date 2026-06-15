@@ -1,0 +1,163 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ABOUT HERO SECTION -->
+{% if about_hero %}
+<section
+    class="about-hero"
+    {% if about_hero.background_image %}
+        style="background-image: url('{{ about_hero.background_image.url }}');"
+    {% endif %}
+>
+    {% if about_hero.title or about_hero.subtitle %}
+    <div class="about-hero-content">
+
+        {% if about_hero.title %}
+        <h1>{{ about_hero.title }}</h1>
+        {% endif %}
+
+        {% if about_hero.subtitle %}
+        <p>{{ about_hero.subtitle }}</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+
+<!-- ABOUT STORY + MISSION SECTION -->
+{% if about_story %}
+<section class="about-story-section">
+
+    <div class="about-story-left">
+
+        {% if about_story.story_title %}
+        <h2>{{ about_story.story_title }}</h2>
+        {% endif %}
+
+        {% if about_story.story_text %}
+        <p>{{ about_story.story_text }}</p>
+        {% endif %}
+
+        {% if about_story.mission_title %}
+        <h2>{{ about_story.mission_title }}</h2>
+        {% endif %}
+
+        {% if about_story.mission_text %}
+        <p>{{ about_story.mission_text }}</p>
+        {% endif %}
+
+    </div>
+
+    {% if about_story.side_image %}
+    <div class="about-story-right">
+        <img src="{{ about_story.side_image.url }}" alt="About Image">
+    </div>
+    {% endif %}
+
+</section>
+{% endif %}
+
+
+<!-- CORE VALUES SECTION -->
+{% if core_value_section or core_value_cards %}
+<section class="core-values-section">
+
+    {% if core_value_section.heading %}
+    <h2 class="core-values-heading">
+        {{ core_value_section.heading }}
+    </h2>
+    {% endif %}
+
+    {% if core_value_cards %}
+    <div class="core-values-wrapper">
+
+        {% for card in core_value_cards %}
+        <div class="core-value-card">
+
+            {% if card.icon %}
+            <div class="core-value-icon">
+                <img src="{{ card.icon.url }}" alt="{{ card.title }}">
+            </div>
+            {% endif %}
+
+            {% if card.title %}
+            <h3>{{ card.title }}</h3>
+            {% endif %}
+
+            {% if card.description %}
+            <p>{{ card.description }}</p>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+</section>
+{% endif %}
+
+
+<!-- FOUNDER SECTION -->
+{% if founder_section %}
+<section class="founder-section">
+
+    {% if founder_section.image %}
+    <div class="founder-image">
+        <img src="{{ founder_section.image.url }}" alt="{{ founder_section.title }}">
+    </div>
+    {% endif %}
+
+    <div class="founder-content">
+
+        {% if founder_section.title %}
+        <h2>{{ founder_section.title }}</h2>
+        {% endif %}
+
+        {% if founder_section.description %}
+        <p>{{ founder_section.description }}</p>
+        {% endif %}
+
+    </div>
+
+</section>
+{% endif %}
+
+
+<!-- COMMITMENT SECTION -->
+{% if commitment_section %}
+<section class="commitment-section">
+
+    <div class="commitment-box">
+
+        {% if commitment_section.heading %}
+        <h2>{{ commitment_section.heading }}</h2>
+        {% endif %}
+
+        {% if commitment_section.description %}
+        <p>{{ commitment_section.description }}</p>
+        {% endif %}
+
+        {% if commitment_section.button_text %}
+        <a
+            href="{{ commitment_section.button_url|default:'#' }}"
+            class="commitment-btn"
+        >
+            {{ commitment_section.button_text }}
+        </a>
+        {% endif %}
+
+    </div>
+
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,166 @@
+{% if subscribe_banner %}
+<section class="subscribe-banner">
+    <div class="subscribe-image">
+        {% if subscribe_banner.left_image %}
+            <img src="{{ subscribe_banner.left_image.url }}" alt="{{ subscribe_banner.heading }}">
+        {% endif %}
+    </div>
+
+    <div class="subscribe-content">
+        <h2>{{ subscribe_banner.heading }}</h2>
+        <p>{{ subscribe_banner.description }}</p>
+
+        <form method="post" action="{% url 'dashboard:subscribe_user' %}" class="subscribe-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter Your Email"
+                required
+            >
+
+            <button type="submit">
+                {{ subscribe_banner.button_text }}
+            </button>
+        </form>
+    </div>
+</section>
+{% endif %}
+
+
+whislist.html
+
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Wishlist | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="wishlist-page">
+    <div class="wishlist-container">
+
+        <div class="wishlist-header">
+            <h2>Your Wishlist</h2>
+            <p class="wishlist-subtitle">
+                Your favourite Glowify products are saved here.
+            </p>
+        </div>
+
+        {% if wishlist_items %}
+            <div class="wishlist-grid">
+
+                {% for item in wishlist_items %}
+                    <div class="wishlist-card">
+
+                        <div class="wishlist-image-box">
+                            {% if item.product.image %}
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+                            {% else %}
+                                <div class="wishlist-no-image">
+                                    No Image
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="wishlist-card-content">
+
+                            <h4>
+                                {% if item.product.name %}
+                                    {{ item.product.name }}
+                                {% else %}
+                                    Glowify Product
+                                {% endif %}
+                            </h4>
+
+                            <p class="wishlist-brand">
+                                {% if item.product.brand %}
+                                    {{ item.product.brand.name }}
+                                {% else %}
+                                    Glowify
+                                {% endif %}
+                            </p>
+
+                            {% if item.product.description %}
+                                <p class="wishlist-desc">
+                                    {{ item.product.description|truncatewords:14 }}
+                                </p>
+                            {% elif item.product.shade_name %}
+                                <p class="wishlist-desc">
+                                    {{ item.product.shade_name }}
+                                </p>
+                            {% else %}
+                                <p class="wishlist-desc">
+                                    Premium beauty product from Glowify.
+                                </p>
+                            {% endif %}
+
+                            <p class="wishlist-price">
+                                ₹{{ item.product.price|floatformat:0 }}
+                            </p>
+
+                            <div class="wishlist-rating">
+                                ⭐ {{ item.product.rating }} ({{ item.product.reviews_count }} Reviews)
+                            </div>
+
+                        </div>
+
+                        <div class="wishlist-actions">
+
+                            <!-- ADD TO CART AND GO TO CART PAGE -->
+                            <form method="post" action="{% url 'dashboard:add_to_cart' item.product.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{% url 'dashboard:cart' %}">
+                                <button type="submit" class="wishlist-cart-btn">
+                                    Add to Cart
+                                </button>
+                            </form>
+
+                            <!-- REMOVE FROM WISHLIST -->
+                            <form method="post" action="{% url 'dashboard:remove_from_wishlist' item.product.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{% url 'dashboard:wishlist' %}">
+                                <button type="submit" class="wishlist-remove-btn">
+                                    Remove
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+
+            <div class="empty-wishlist">
+                <div class="empty-wishlist-icon">
+                    ♡
+                </div>
+
+                <h3>Your wishlist is empty</h3>
+
+                <p>
+                    Add your favourite products by clicking the heart icon beside the Add to Cart button.
+                </p>
+
+                <a href="{% url 'dashboard:shop' %}" class="continue-shopping-btn">
+                    Continue Shopping
+                </a>
+            </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

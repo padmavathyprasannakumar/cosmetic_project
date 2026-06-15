@@ -1,0 +1,414 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Offers | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/offers.css' %}?v={{ version }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="offers-page">
+
+    {% if offer_banners %}
+        <div class="offer-carousel" id="offerCarousel">
+
+            <div class="offer-carousel-track" id="offerCarouselTrack">
+
+                {% for banner in offer_banners %}
+                    <div class="offer-slide">
+                        <img
+                            src="{{ banner.image.url }}"
+                            alt="Glowify Offer Banner {{ forloop.counter }}"
+                        >
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            {% if offer_banners|length > 1 %}
+                <button
+                    type="button"
+                    class="offer-arrow offer-arrow-left"
+                    id="offerPrevBtn"
+                    aria-label="Previous offer"
+                >
+                    ‹
+                </button>
+
+                <button
+                    type="button"
+                    class="offer-arrow offer-arrow-right"
+                    id="offerNextBtn"
+                    aria-label="Next offer"
+                >
+                    ›
+                </button>
+
+                <div class="offer-dots" id="offerDots">
+                    {% for banner in offer_banners %}
+                        <button
+                            type="button"
+                            class="offer-dot {% if forloop.first %}active{% endif %}"
+                            data-slide="{{ forloop.counter0 }}"
+                            aria-label="Go to offer {{ forloop.counter }}"
+                        ></button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    {% else %}
+        <div class="empty-offers">
+            <h3>No offer banners added</h3>
+            <p>Add offer carousel images from Django Admin.</p>
+        </div>
+    {% endif %}
+
+    <div class="bogo-section">
+
+        <div class="bogo-heading-box">
+            <h2>
+                {% if offer_section and offer_section.heading %}
+                    {{ offer_section.heading }}
+                {% else %}
+                    Buy 1 Get 1 Free
+                {% endif %}
+            </h2>
+        </div>
+
+        {% if offer_products %}
+            <div class="bogo-products-grid">
+
+                {% for product in offer_products %}
+                    <div class="bogo-product-card">
+
+                        <div class="bogo-product-image">
+                            <img src="{{ product.image.url }}" alt="{{ product.image_name }}">
+                        </div>
+
+                        <div class="bogo-product-content">
+                            <h3>{{ product.image_name }}</h3>
+
+                            <p class="bogo-product-desc">
+                                {{ product.description }}
+                            </p>
+
+                            <div class="bogo-price-box">
+                                <span class="bogo-discount-price">
+                                    ₹{{ product.discounted_price|floatformat:0 }}
+                                </span>
+
+                                <span class="bogo-original-price">
+                                    ₹{{ product.original_price|floatformat:0 }}
+                                </span>
+                            </div>
+
+                            <form method="post" action="{% url 'dashboard:add_offer_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="bogo-cart-btn">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <div class="empty-offers">
+                <h3>No offer products added</h3>
+                <p>Add three offer products from Django Admin.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+ <!-- =========================
+         EXCLUSIVE CLAIM OFFER SECTION
+         Left image, right content, voucher, claim button
+    ========================== -->
+
+    {% if exclusive_offers %}
+<section class="exclusive-offers-section">
+
+    {% for exclusive_offer in exclusive_offers %}
+        <div class="exclusive-offer-card">
+
+            <!-- LEFT IMAGE -->
+            <div class="exclusive-offer-left">
+
+                {% if exclusive_offer.offer_image %}
+                    <img
+                        src="{{ exclusive_offer.offer_image.url }}"
+                        alt="{{ exclusive_offer.title|default:'Exclusive Offer' }}"
+                    >
+
+                {% elif exclusive_offer.image %}
+                    <img
+                        src="{{ exclusive_offer.image.url }}"
+                        alt="{{ exclusive_offer.title|default:'Exclusive Offer' }}"
+                    >
+
+                {% elif exclusive_offer.product and exclusive_offer.product.image %}
+                    <img
+                        src="{{ exclusive_offer.product.image.url }}"
+                        alt="{{ exclusive_offer.product.name }}"
+                    >
+
+                {% else %}
+                    <div class="exclusive-no-image">
+                        No Image
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="exclusive-offer-right">
+
+                <h2>
+                    {% if exclusive_offer.title %}
+                        {{ exclusive_offer.title }}
+                    {% elif exclusive_offer.product %}
+                        {{ exclusive_offer.product.name }}
+                    {% else %}
+                        Exclusive Offer
+                    {% endif %}
+                </h2>
+
+                <p class="exclusive-offer-description">
+                    {% if exclusive_offer.description %}
+                        {{ exclusive_offer.description }}
+                    {% elif exclusive_offer.product and exclusive_offer.product.description %}
+                        {{ exclusive_offer.product.description }}
+                    {% else %}
+                        Grab this exclusive Glowify offer before it ends.
+                    {% endif %}
+                </p>
+
+                <div class="exclusive-offer-price-row">
+
+                    <span class="exclusive-offer-price">
+                        ₹{{ exclusive_offer.offer_price|floatformat:0 }}
+                    </span>
+
+                    <span class="exclusive-offer-old-price">
+                        ₹{{ exclusive_offer.original_price|floatformat:0 }}
+                    </span>
+
+                    <span class="exclusive-offer-save">
+                        {% if exclusive_offer.save_text %}
+                            {{ exclusive_offer.save_text }}
+                        {% elif exclusive_offer.discount_percentage %}
+                            Save {{ exclusive_offer.discount_percentage }}%
+                        {% else %}
+                            Save Offer
+                        {% endif %}
+                    </span>
+
+                </div>
+
+                {% if exclusive_offer.voucher_code %}
+                    <div class="exclusive-voucher-box">
+                        Voucher:
+                        <strong>{{ exclusive_offer.voucher_code }}</strong>
+                    </div>
+                {% endif %}
+
+                <form
+                    method="post"
+                    action="{% url 'dashboard:claim_exclusive_offer' exclusive_offer.id %}"
+                    class="exclusive-offer-form"
+                >
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{% url 'dashboard:cart' %}"
+                    >
+
+                    <button type="submit" class="claim-offer-btn">
+                        {% if exclusive_offer.button_text %}
+                            {{ exclusive_offer.button_text }}
+                        {% else %}
+                            Claim This Offer
+                        {% endif %}
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    {% endfor %}
+
+</section>
+{% endif %}
+    
+             <!-- =========================
+         OFFERS SUBSCRIBE / INNER CIRCLE BOX
+    ========================== -->
+    {% if subscribe_banner %}
+    <section class="offers-subscribe-section">
+        <div
+            class="offers-subscribe-box"
+            style="background: {{ subscribe_banner.background_color|default:'linear-gradient(135deg, #f58fba, #f72585)' }};"
+        >
+            <h2>
+                {{ subscribe_banner.heading }}
+            </h2>
+
+            <p>
+                {{ subscribe_banner.description }}
+            </p>
+
+            <form
+                method="post"
+                action="{% url 'dashboard:subscribe_user' %}"
+                class="offers-subscribe-form"
+            >
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="next"
+                    value="{{ request.get_full_path }}"
+                >
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="{{ subscribe_banner.email_placeholder|default:'Enter Your Email' }}"
+                    required
+                >
+
+                <button type="submit">
+                    {{ subscribe_banner.button_text|default:'Register' }}
+                </button>
+            </form>
+        </div>
+    </section>
+    {% endif %}
+
+
+    <!-- =========================
+         SUBSCRIBE POPUP MESSAGE
+    ========================== -->
+    {% if messages %}
+    <div class="subscribe-popup-overlay" id="subscribePopup">
+        <div class="subscribe-popup-box">
+
+            {% for message in messages %}
+                <p class="subscribe-popup-message {{ message.tags }}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+
+            <button type="button" onclick="closeSubscribePopup()">
+                OK
+            </button>
+
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+
+
+   
+
+    
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const carousel = document.getElementById("offerCarousel");
+        const track = document.getElementById("offerCarouselTrack");
+        const slides = document.querySelectorAll(".offer-slide");
+        const prevBtn = document.getElementById("offerPrevBtn");
+        const nextBtn = document.getElementById("offerNextBtn");
+        const dots = document.querySelectorAll(".offer-dot");
+
+        if (!carousel || !track || slides.length === 0) return;
+
+        let currentIndex = 0;
+        let autoSlideTimer = null;
+
+        function showSlide(index) {
+            if (index < 0) {
+                currentIndex = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentIndex = 0;
+            } else {
+                currentIndex = index;
+            }
+
+            track.style.transform = "translateX(-" + (currentIndex * 100) + "%)";
+
+            dots.forEach(function (dot, dotIndex) {
+                dot.classList.toggle("active", dotIndex === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function startAutoSlide() {
+            if (slides.length <= 1) return;
+
+            autoSlideTimer = setInterval(function () {
+                nextSlide();
+            }, 4500);
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideTimer) {
+                clearInterval(autoSlideTimer);
+            }
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener("click", function () {
+                stopAutoSlide();
+                nextSlide();
+                startAutoSlide();
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener("click", function () {
+                stopAutoSlide();
+                prevSlide();
+                startAutoSlide();
+            });
+        }
+
+        dots.forEach(function (dot) {
+            dot.addEventListener("click", function () {
+                stopAutoSlide();
+                showSlide(parseInt(dot.dataset.slide));
+                startAutoSlide();
+            });
+        });
+
+        carousel.addEventListener("mouseenter", stopAutoSlide);
+        carousel.addEventListener("mouseleave", startAutoSlide);
+
+        showSlide(0);
+        startAutoSlide();
+    });
+</script>
+{% endblock %}

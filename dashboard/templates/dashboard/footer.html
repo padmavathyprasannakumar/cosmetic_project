@@ -1,0 +1,107 @@
+{% load static %}
+
+<footer class="glowify-footer">
+
+    <div class="footer-wave"></div>
+
+    <div class="footer-container">
+
+        <!-- Logo + Address -->
+        <div class="footer-brand">
+
+            <div class="footer-logo-circle">
+                {% if footer_setting and footer_setting.logo %}
+                    <img src="{{ footer_setting.logo.url }}" alt="Glowify Logo">
+                {% else %}
+                    <img src="{% static 'dashboard/images/logo.png' %}" alt="Glowify Logo">
+                {% endif %}
+            </div>
+
+            <p class="footer-address">
+                {% if footer_setting and footer_setting.address %}
+                    {{ footer_setting.address|linebreaksbr }}
+                {% else %}
+                    3rd Floor, Valasaravakam,<br>
+                    Chennai - 600800
+                {% endif %}
+            </p>
+
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-column">
+            <h3>
+                {% if footer_setting and footer_setting.quick_links_title %}
+                    {{ footer_setting.quick_links_title }}
+                {% else %}
+                    Quick Links
+                {% endif %}
+            </h3>
+
+            {% for link in footer_quick_links %}
+                <a href="{{ link.url }}">
+                    {{ link.title }}
+                </a>
+            {% empty %}
+                <a href="{% url 'dashboard:shop' %}">Shop</a>
+                <a href="#">New Arrivals</a>
+                <a href="#">Offers</a>
+            {% endfor %}
+        </div>
+
+        <!-- Support -->
+        <div class="footer-column">
+            <h3>
+                {% if footer_setting and footer_setting.support_title %}
+                    {{ footer_setting.support_title }}
+                {% else %}
+                    Support
+                {% endif %}
+            </h3>
+
+            {% for link in footer_support_links %}
+                <a href="{{ link.url }}">
+                    {{ link.title }}
+                </a>
+            {% empty %}
+                <a href="{% url 'dashboard:about' %}">About</a>
+                <a href="{% url 'dashboard:contact' %}">Contact</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            {% endfor %}
+        </div>
+
+        <!-- Social Media -->
+        <div class="footer-column social-column">
+            <h3>
+                {% if footer_setting and footer_setting.social_media_title %}
+                    {{ footer_setting.social_media_title }}
+                {% else %}
+                    Social Media
+                {% endif %}
+            </h3>
+
+            <div class="social-icons">
+                {% for social in footer_social_links %}
+                    <a href="{{ social.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social.name }}">
+                        {% if social.icon_class %}
+                            <i class="{{ social.icon_class }}"></i>
+                        {% else %}
+                            {{ social.name|slice:":1" }}
+                        {% endif %}
+                    </a>
+                {% empty %}
+                    <a href="#" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</footer>

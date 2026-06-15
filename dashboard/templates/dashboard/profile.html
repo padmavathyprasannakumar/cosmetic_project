@@ -1,0 +1,173 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Profile | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<section class="profile-page-section">
+
+    <div class="profile-container">
+
+        <div class="profile-header">
+            <h1>My Profile</h1>
+            <p>Manage your personal details and delivery address.</p>
+        </div>
+
+        {% if messages %}
+            <div class="profile-message-wrapper">
+                {% for message in messages %}
+                    <div class="profile-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="profile-layout">
+
+            <!-- LEFT PROFILE CARD -->
+            <div class="profile-card">
+
+                <div class="profile-image-box">
+                    {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="Profile Image">
+                    {% else %}
+                        <div class="profile-default-avatar">
+                            {{ request.user.first_name|default:request.user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <h2>
+                    {% if profile.full_name %}
+                        {{ profile.full_name }}
+                    {% else %}
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                    {% endif %}
+                </h2>
+
+                <p class="profile-email">
+                    {{ request.user.email }}
+                </p>
+
+                {% if profile.mobile %}
+                    <p class="profile-mobile">
+                        {{ profile.mobile }}
+                    </p>
+                {% endif %}
+
+                <div class="profile-mini-stats">
+                    <div>
+                        <strong>{{ cart_count|default:0 }}</strong>
+                        <span>Cart</span>
+                    </div>
+
+                    <div>
+                        <strong>{{ wishlist_count|default:0 }}</strong>
+                        <span>Wishlist</span>
+                    </div>
+                </div>
+
+                <a href="{% url 'dashboard:shop' %}" class="profile-shop-btn">
+                    Continue Shopping
+                </a>
+
+            </div>
+
+            <!-- RIGHT FORM CARD -->
+            <div class="profile-form-card">
+
+                <h2>Edit Profile</h2>
+
+                <form method="post" enctype="multipart/form-data" class="profile-form">
+                    {% csrf_token %}
+
+                    <div class="form-group full-width">
+                        <label>Profile Image</label>
+                        <input type="file" name="profile_image" accept="image/*">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input
+                                type="text"
+                                name="full_name"
+                                value="{{ profile.full_name|default:'' }}"
+                                placeholder="Enter full name"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mobile No</label>
+                            <input
+                                type="text"
+                                name="mobile"
+                                value="{{ profile.mobile|default:'' }}"
+                                placeholder="Enter mobile number"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Address</label>
+                        <textarea
+                            name="address"
+                            placeholder="Enter address"
+                        >{{ profile.address|default:'' }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input
+                                type="text"
+                                name="city"
+                                value="{{ profile.city|default:'' }}"
+                                placeholder="Enter city"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>State</label>
+                            <input
+                                type="text"
+                                name="state"
+                                value="{{ profile.state|default:'' }}"
+                                placeholder="Enter state"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-row single-row">
+                        <div class="form-group">
+                            <label>Pin Code</label>
+                            <input
+                                type="text"
+                                name="pin_code"
+                                value="{{ profile.pin_code|default:'' }}"
+                                placeholder="Enter pin code"
+                            >
+                        </div>
+                    </div>
+
+                    <button type="submit" class="profile-save-btn">
+                        Save Changes
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

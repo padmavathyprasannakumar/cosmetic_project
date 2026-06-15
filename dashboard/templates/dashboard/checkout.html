@@ -1,0 +1,595 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Checkout | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}?v=8">
+{% endblock %}
+
+{% block content %}
+
+<form method="post" class="checkout-page" id="checkoutForm">
+    {% csrf_token %}
+
+    <section class="checkout-form">
+        <h2>Checkout</h2>
+
+        <!-- =========================
+             SHIPPING ADDRESS
+        ========================== -->
+        <h3>1. Shipping Address</h3>
+        <p>Please enter your delivery details below to proceed.</p>
+
+        <div class="form-grid">
+            <div>
+                <label>First Name<span>*</span></label>
+                <input
+                    type="text"
+                    name="first_name"
+                    placeholder="e.g Narmatha"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>Last Name</label>
+                <input
+                    type="text"
+                    name="last_name"
+                    placeholder="e.g Tharmaraj"
+                >
+            </div>
+
+            <div>
+                <label>Mobile No<span>*</span></label>
+                <input
+                    type="text"
+                    name="mobile_no"
+                    placeholder="Enter mobile number"
+                    required
+                >
+            </div>
+
+            <div class="full">
+                <label>Address<span>*</span></label>
+                <input
+                    type="text"
+                    name="address"
+                    placeholder="123 Luxury lane, Tenkasi"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>City<span>*</span></label>
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="e.g Tenkasi"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>State<span>*</span></label>
+                <input
+                    type="text"
+                    name="state"
+                    placeholder="e.g Tamil Nadu"
+                    required
+                >
+            </div>
+
+            <div>
+                <label>Pin code<span>*</span></label>
+                <input
+                    type="text"
+                    name="pin_code"
+                    placeholder="Enter Pincode"
+                    required
+                >
+            </div>
+        </div>
+
+
+        <!-- =========================
+             SHIPPING METHOD
+        ========================== -->
+        <h3>2. Shipping Method</h3>
+
+        <div class="shipping-methods">
+            {% for method in shipping_methods %}
+                <label class="shipping-card {% if method.id == default_shipping.id %}active{% endif %}">
+                    <input
+                        type="radio"
+                        name="shipping_method"
+                        value="{{ method.id }}"
+                        {% if method.id == default_shipping.id %}checked{% endif %}
+                        required
+                    >
+
+                    <div>
+                        <strong>{{ method.name }}</strong>
+                        <span>{{ method.subtitle }}</span>
+                    </div>
+
+                    <b>₹{{ method.cost|floatformat:0 }}</b>
+                </label>
+            {% empty %}
+                <p>No shipping methods added.</p>
+            {% endfor %}
+        </div>
+
+
+        <!-- =========================
+             PAYMENT METHOD
+        ========================== -->
+        <h3>3. Payment Method</h3>
+
+        <div class="payment-methods" id="paymentMethods">
+            {% for method in payment_methods %}
+                <label
+                    class="payment-card {% if forloop.first %}active{% endif %}"
+                    data-payment-code="{{ method.code }}"
+                >
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="{{ method.id }}"
+                        data-code="{{ method.code }}"
+                        {% if forloop.first %}checked{% endif %}
+                        required
+                    >
+
+                    <span class="payment-icon-box">
+                        {% if method.icon_image %}
+                            <img
+                                src="{{ method.icon_image.url }}"
+                                alt="{{ method.name }}"
+                                class="payment-method-icon"
+                            >
+                        {% elif method.icon_text %}
+                            <span class="payment-method-text-icon">
+                                {{ method.icon_text }}
+                            </span>
+                        {% endif %}
+                    </span>
+
+                    <span class="payment-method-name">
+                        {{ method.name }}
+                    </span>
+                </label>
+            {% empty %}
+                <p>No payment methods added.</p>
+            {% endfor %}
+        </div>
+
+
+        <!-- =========================
+             CREDIT CARD DETAILS
+        ========================== -->
+        <div class="payment-details payment-details-card" data-payment-panel="credit-card">
+            <div class="card-fields">
+                <label>Card Number<span>*</span></label>
+                <input
+                    type="text"
+                    name="card_number"
+                    placeholder="0000 0000 0000 0000"
+                    data-required-for="credit-card"
+                >
+
+                <div class="form-grid two">
+                    <div>
+                        <label>Expiry Date<span>*</span></label>
+                        <input
+                            type="text"
+                            name="expiry_date"
+                            placeholder="MM/YYYY"
+                            data-required-for="credit-card"
+                        >
+                    </div>
+
+                    <div>
+                        <label>CVV<span>*</span></label>
+                        <input
+                            type="text"
+                            name="cvv"
+                            placeholder="000"
+                            data-required-for="credit-card"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- =========================
+             NET BANKING DETAILS
+        ========================== -->
+        <div class="payment-details payment-details-bank" data-payment-panel="net-banking">
+            <div class="bank-fields">
+                <div>
+                    <label>Savings Account No<span>*</span></label>
+                    <input
+                        type="text"
+                        name="account_number"
+                        placeholder="0000 0000 0000 0"
+                        data-required-for="net-banking"
+                    >
+                </div>
+
+                <div>
+                    <label>Account Holder Name<span>*</span></label>
+                    <input
+                        type="text"
+                        name="account_holder_name"
+                        placeholder="Narmatha"
+                        data-required-for="net-banking"
+                    >
+                </div>
+
+                <div>
+                    <label>Bank Name<span>*</span></label>
+                    <input
+                        type="text"
+                        name="bank_name"
+                        placeholder="IOB"
+                        data-required-for="net-banking"
+                    >
+                </div>
+            </div>
+        </div>
+
+
+        <!-- =========================
+             UPI DETAILS
+        ========================== -->
+        <div class="payment-details payment-details-upi" data-payment-panel="upi">
+            <div class="upi-options">
+
+                <label class="upi-option">
+                    <input
+                        type="radio"
+                        name="upi_app"
+                        value="Google Pay"
+                        data-required-for="upi"
+                    >
+
+                    <span class="upi-radio"></span>
+
+                    <span class="upi-icon-text gpay-icon">
+                        GPay
+                    </span>
+
+                    <span class="upi-name">
+                        Google Pay
+                    </span>
+                </label>
+
+                <label class="upi-option">
+                    <input
+                        type="radio"
+                        name="upi_app"
+                        value="PhonePe"
+                        data-required-for="upi"
+                    >
+
+                    <span class="upi-radio"></span>
+
+                    <span class="upi-icon-text phonepe-icon">
+                        पे
+                    </span>
+
+                    <span class="upi-name">
+                        Phone pe
+                    </span>
+                </label>
+
+                <label class="upi-option">
+                    <input
+                        type="radio"
+                        name="upi_app"
+                        value="Paytm"
+                        data-required-for="upi"
+                    >
+
+                    <span class="upi-radio"></span>
+
+                    <span class="upi-icon-text paytm-icon">
+                        Paytm
+                    </span>
+
+                    <span class="upi-name">
+                        Paytm
+                    </span>
+                </label>
+
+            </div>
+        </div>
+
+
+        <!-- =========================
+             PHONEPE CHECKOUT
+        ========================== -->
+        <div class="payment-details payment-details-phonepe" data-payment-panel="phonepe">
+            <div class="phonepe-info-box">
+                <strong>PhonePe Secure Checkout</strong>
+                <p>You will be redirected to PhonePe to complete payment using UPI, card, or net banking.</p>
+            </div>
+        </div>
+
+
+        <button type="submit" class="place-order-btn" id="placeOrderBtn">
+            Place Order
+        </button>
+    </section>
+
+
+    <!-- =========================
+         ORDER SUMMARY
+    ========================== -->
+    <aside class="checkout-summary">
+        <h3>Order Summary</h3>
+
+        {% for item in cart_items %}
+            <div class="summary-product">
+
+                {% if item.product.image %}
+                    <img
+                        src="{{ item.product.image.url }}"
+                        alt="{% if item.product.title %}{{ item.product.title }}{% else %}{{ item.product.name }}{% endif %}"
+                    >
+                {% else %}
+                    <div class="summary-no-image">
+                        No Image
+                    </div>
+                {% endif %}
+
+                <div class="summary-product-info">
+                    <h4>
+                        {% if item.product.title %}
+                            {{ item.product.title }}
+                        {% else %}
+                            {{ item.product.name }}
+                        {% endif %}
+                    </h4>
+
+                    {% if item.is_session_offer %}
+                        <p class="summary-offer-label">
+                            {{ item.offer_label }}
+                        </p>
+                    {% else %}
+                        {% if item.product.brand %}
+                            <p>{{ item.product.brand.name }}</p>
+                        {% endif %}
+
+                        {% if item.product.shade_name %}
+                            <p>{{ item.product.shade_name }}</p>
+                        {% endif %}
+                    {% endif %}
+
+                    <p>Qty: {{ item.quantity }}</p>
+
+                    {% if item.is_offer_claimed %}
+                        <div class="checkout-voucher-badge">
+                            {% if item.voucher_code %}
+                                Voucher Applied:
+                                <strong>{{ item.voucher_code }}</strong>
+                            {% else %}
+                                Offer Applied
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="summary-product-price">
+                    {% if item.line_discount %}
+                        <del>
+                            ₹{{ item.line_original_total|floatformat:0 }}
+                        </del>
+                    {% endif %}
+
+                    <strong>
+                        ₹{{ item.line_total|floatformat:0 }}
+                    </strong>
+
+                    {% if item.line_discount %}
+                        <span class="summary-saving">
+                            Saved ₹{{ item.line_discount|floatformat:0 }}
+                        </span>
+                    {% endif %}
+                </div>
+
+            </div>
+        {% empty %}
+            <p>No products in cart.</p>
+        {% endfor %}
+
+        {% if offer_discount_total %}
+            <div class="checkout-offer-voucher-box">
+                <h3>Offer Voucher Applied</h3>
+
+                {% for item in cart_items %}
+                    {% if item.is_offer_claimed %}
+                        <div class="checkout-offer-row">
+                            <div>
+                                <strong>
+                                    {% if item.product.title %}
+                                        {{ item.product.title }}
+                                    {% else %}
+                                        {{ item.product.name }}
+                                    {% endif %}
+                                </strong>
+
+                                {% if item.voucher_code %}
+                                    <p>
+                                        Voucher Code:
+                                        <span>{{ item.voucher_code }}</span>
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        Offer:
+                                        <span>{{ item.offer_label }}</span>
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <p>
+                                    Offer Price:
+                                    ₹{{ item.line_total|floatformat:0 }}
+                                </p>
+
+                                <p class="checkout-saving">
+                                    Discount:
+                                    -₹{{ item.line_discount|floatformat:0 }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="checkout-offer-total">
+                    <span>Total Offer Discount</span>
+                    <strong>-₹{{ offer_discount_total|floatformat:0 }}</strong>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if original_subtotal and offer_discount_total %}
+            <div class="summary-line">
+                <span>Original Subtotal</span>
+                <strong>₹{{ original_subtotal|floatformat:0 }}</strong>
+            </div>
+        {% endif %}
+
+        <div class="summary-line">
+            <span>Subtotal</span>
+            <strong>₹{{ subtotal|floatformat:0 }}</strong>
+        </div>
+
+        {% if offer_discount_total %}
+            <div class="summary-line discount-line">
+                <span>Offer Discount</span>
+                <strong>-₹{{ offer_discount_total|floatformat:0 }}</strong>
+            </div>
+        {% endif %}
+
+        <div class="summary-line">
+            <span>Estimated Shipping</span>
+            <strong>₹{{ shipping_cost|floatformat:0 }}</strong>
+        </div>
+
+        <div class="summary-line">
+            <span>GST</span>
+            <strong>₹{{ gst|floatformat:0 }}</strong>
+        </div>
+
+        <hr>
+
+        <div class="summary-line total-line">
+            <span>Total</span>
+            <strong>₹{{ total|floatformat:0 }}</strong>
+        </div>
+
+        <p class="terms">
+            By placing your order, you agree to Glowify Terms of service and Privacy Policy.
+        </p>
+    </aside>
+</form>
+
+
+<!-- =========================
+     PROCESSING PAYMENT POPUP
+========================== -->
+<div class="payment-processing-overlay" id="paymentProcessingOverlay">
+    <div class="payment-processing-box">
+        <div class="payment-loader"></div>
+
+        <h3>Processing Payment...</h3>
+
+        <p>Please wait while we confirm your payment.</p>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const paymentCards = document.querySelectorAll(".payment-card");
+        const paymentRadios = document.querySelectorAll("input[name='payment_method']");
+        const paymentPanels = document.querySelectorAll(".payment-details");
+        const checkoutForm = document.getElementById("checkoutForm");
+        const placeOrderBtn = document.getElementById("placeOrderBtn");
+        const processingOverlay = document.getElementById("paymentProcessingOverlay");
+
+        function normalizeCode(code) {
+            if (!code) {
+                return "credit-card";
+            }
+
+            return code.toLowerCase().trim();
+        }
+
+        function showPaymentPanel(paymentCode) {
+            paymentCode = normalizeCode(paymentCode);
+
+            paymentCards.forEach(function (card) {
+                const cardCode = normalizeCode(card.dataset.paymentCode);
+                card.classList.toggle("active", cardCode === paymentCode);
+            });
+
+            paymentPanels.forEach(function (panel) {
+                const panelCode = normalizeCode(panel.dataset.paymentPanel);
+                const isActive = panelCode === paymentCode;
+
+                panel.classList.toggle("active", isActive);
+
+                const inputs = panel.querySelectorAll("input");
+
+                inputs.forEach(function (input) {
+                    input.disabled = !isActive;
+
+                    if (input.dataset.requiredFor === paymentCode) {
+                        input.required = isActive;
+                    } else {
+                        input.required = false;
+                    }
+                });
+            });
+        }
+
+        paymentRadios.forEach(function (radio) {
+            radio.addEventListener("change", function () {
+                showPaymentPanel(radio.dataset.code);
+            });
+        });
+
+        const checkedPayment = document.querySelector("input[name='payment_method']:checked");
+
+        if (checkedPayment) {
+            showPaymentPanel(checkedPayment.dataset.code);
+        } else if (paymentRadios.length > 0) {
+            paymentRadios[0].checked = true;
+            showPaymentPanel(paymentRadios[0].dataset.code);
+        }
+
+        if (checkoutForm) {
+            checkoutForm.addEventListener("submit", function () {
+                if (placeOrderBtn) {
+                    placeOrderBtn.disabled = true;
+                    placeOrderBtn.innerText = "Processing Payment...";
+                    placeOrderBtn.classList.add("processing");
+                }
+
+                if (processingOverlay) {
+                    processingOverlay.classList.add("active");
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

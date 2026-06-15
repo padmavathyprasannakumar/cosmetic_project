@@ -1,0 +1,198 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Contact | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}?v=20">
+{% endblock %}
+
+{% block content %}
+
+{% if contact_hero and contact_hero.background_image %}
+<section class="contact-hero">
+    <img src="{{ contact_hero.background_image.url }}" alt="Contact Hero" class="contact-hero-img">
+
+    {% if contact_hero.title or contact_hero.description %}
+    <div class="contact-hero-content">
+        {% if contact_hero.title %}
+        <h1>{{ contact_hero.title }}</h1>
+        {% endif %}
+
+        {% if contact_hero.description %}
+        <p>{{ contact_hero.description }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+<section class="contact-page-section">
+    <div class="contact-page-container">
+
+        <div class="contact-layout">
+
+            <div class="contact-form-card">
+                <h2>Send a Message</h2>
+
+                <form method="post" action="{% url 'dashboard:contact' %}" class="contact-form">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="full_name">Full Name</label>
+                            <input type="text" id="full_name" name="full_name" placeholder="e.g Narmatha" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Id</label>
+                            <input type="email" id="email" name="email" placeholder="nar@gmail.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row single-row">
+                        <div class="form-group">
+                            <label for="mobile">Mobile No</label>
+                            <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Type here.." required></textarea>
+                    </div>
+
+                    <button type="submit" class="contact-send-btn">
+                        Send
+                    </button>
+                </form>
+            </div>
+
+            <div class="contact-service-column">
+
+                <div class="customer-service-card">
+                    <h2>
+                        {% if contact_service and contact_service.heading %}
+                        {{ contact_service.heading }}
+                        {% else %}
+                        Customer Services
+                        {% endif %}
+                    </h2>
+
+                    <div class="service-info-row">
+                        <div class="service-icon email-icon">
+                            <span>✉</span>
+                        </div>
+
+                        <div>
+                            <h4>
+                                {% if contact_service and contact_service.email_title %}
+                                {{ contact_service.email_title }}
+                                {% else %}
+                                Email Us
+                                {% endif %}
+                            </h4>
+
+                            <p>
+                                {% if contact_service and contact_service.service_email %}
+                                {{ contact_service.service_email }}
+                                {% else %}
+                                padmavathyprasanna4@gmail.com
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="service-info-row">
+                        <div class="service-icon call-icon">
+                            <span>☎</span>
+                        </div>
+
+                        <div>
+                            <h4>
+                                {% if contact_service and contact_service.call_title %}
+                                {{ contact_service.call_title }}
+                                {% else %}
+                                Call Us
+                                {% endif %}
+                            </h4>
+
+                            <p>
+                                {% if contact_service and contact_service.phone_number_1 %}
+                                {{ contact_service.phone_number_1 }}
+                                {% else %}
+                                +91-1234567890
+                                {% endif %}
+                            </p>
+
+                            {% if contact_service and contact_service.phone_number_2 %}
+                            <p>{{ contact_service.phone_number_2 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'dashboard:track_order_from_contact' %}" class="order-action-card">
+                    <span>
+                        {% if contact_service and contact_service.track_order_text %}
+                        {{ contact_service.track_order_text }}
+                        {% else %}
+                        Track Your Order
+                        {% endif %}
+                    </span>
+
+                    <span class="order-arrow">›</span>
+                </a>
+
+                <a href="{% if contact_service and contact_service.cancel_order_url %}{{ contact_service.cancel_order_url }}{% else %}#{% endif %}"
+                    class="order-action-card">
+                    <span>
+                        {% if contact_service and contact_service.cancel_order_text %}
+                        {{ contact_service.cancel_order_text }}
+                        {% else %}
+                        Cancel Order
+                        {% endif %}
+                    </span>
+
+                    <span class="order-arrow">›</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% if faq_items %}
+<section class="contact-faq-section">
+    <div class="contact-faq-container">
+
+        <h2 class="contact-faq-heading">
+            {% if faq_section and faq_section.heading %}
+            {{ faq_section.heading }}
+            {% else %}
+            Frequently Asked Questions
+            {% endif %}
+        </h2>
+
+        <div class="contact-faq-list">
+            {% for faq in faq_items %}
+            <details class="contact-faq-item" {% if forloop.first %}open{% endif %}>
+                <summary>
+                    <span>{{ forloop.counter }}. {{ faq.question }}</span>
+                    <span class="faq-arrow">⌃</span>
+                </summary>
+
+                <div class="contact-faq-answer">
+                    {{ faq.answer }}
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

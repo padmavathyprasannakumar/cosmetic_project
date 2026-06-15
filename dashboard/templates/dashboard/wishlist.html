@@ -1,0 +1,65 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="wishlist-page">
+    <h2>Your Wishlist</h2>
+    <p class="wishlist-subtitle">Your favourite Glowify products</p>
+
+    {% if wishlist_items %}
+        <div class="wishlist-grid">
+
+            {% for item in wishlist_items %}
+                <div class="wishlist-card">
+
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+
+                    <h4>{{ item.product.title }}</h4>
+
+                    <p class="wishlist-brand">
+                        {{ item.product.brand.name|default:"Glowify" }}
+                    </p>
+
+                    <p class="wishlist-desc">
+                        {{ item.product.description }}
+                    </p>
+
+                    <p class="wishlist-price">
+                        ₹{{ item.product.price|floatformat:0 }}
+                    </p>
+
+                    <div class="wishlist-actions">
+
+                        <form method="post" action="{% url 'dashboard:add_to_cart' item.product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="wishlist-cart-btn">
+                                Add to Cart
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'dashboard:remove_from_wishlist' item.product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="wishlist-remove-btn">
+                                Remove
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <p class="empty-wishlist">Your wishlist is empty.</p>
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

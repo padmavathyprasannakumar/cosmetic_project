@@ -1,0 +1,105 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Register | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-left">
+        <img src="{% static 'images/auth-girl.png' %}" alt="Register">
+    </div>
+
+    <div class="auth-right">
+
+        <h2>Register Now !</h2>
+
+        <div class="auth-card">
+            <h3>Create Account</h3>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="auth-message {{ message.tags }}">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'dashboard:register' %}">
+                {% csrf_token %}
+
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    name="full_name"
+                    placeholder="e.g Narmatha"
+                    required
+                >
+
+                <label>Email Id</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="nar@gmail.com"
+                    required
+                >
+
+                <label>Mobile No</label>
+                <input
+                    type="text"
+                    name="mobile"
+                    placeholder="Enter mobile number"
+                >
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+                >
+
+                <label class="remember-label register-remember">
+                    <input type="checkbox" name="remember_me" checked>
+                    Remember me
+                </label>
+
+                <button type="submit" class="auth-main-btn">
+                    Register
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{% url 'dashboard:login' %}?next={{ next|urlencode }}">
+                    Login
+                </a>
+            </p>
+
+            <p class="instant-text">Instant Signup</p>
+
+            <div class="social-login-row">
+                <button type="button">
+                    <span>G</span>
+                    Continue With Google
+                </button>
+
+                <button type="button">
+                    <span>f</span>
+                    Continue With Facebook
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,461 @@
+/* =========================================================
+   CONTACT HERO
+========================================================= */
+
+
+
+.contact-hero {
+    width: calc(100% - 90px);
+    max-width: 1700px;
+    height: 400px;
+    margin: 34px auto 0;
+    position: relative;
+    overflow: hidden;
+    background: #F8F8F8;
+    border-radius: 12px;
+}
+
+.contact-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.contact-hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 620px;
+    text-align: center;
+}
+
+.contact-hero-content h1 {
+    margin: 0 0 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #202020;
+    line-height: 1.2;
+}
+
+.contact-hero-content p {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 1.45;
+    color: #222222;
+}
+
+/* =========================================================
+   CONTACT PAGE TWO COLUMN SECTION
+========================================================= */
+
+.contact-page-section {
+    padding: 48px 32px 60px;
+    background: #ffffff;
+}
+
+.contact-page-container {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.95fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.contact-form-card,
+.customer-service-card,
+.order-action-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.contact-form-card {
+    padding: 22px 34px 28px;
+    min-height: 350px;
+}
+
+.contact-form-card h2,
+.customer-service-card h2 {
+    margin: 0 0 22px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: #222222;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.contact-form {
+    width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 22px;
+}
+
+.single-row {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #222222;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #333333;
+    background: #ffffff;
+    transition: 0.25s ease;
+    box-sizing: border-box;
+}
+
+.form-group input {
+    height: 34px;
+    padding: 0 14px;
+}
+
+.form-group textarea {
+    min-height: 44px;
+    resize: vertical;
+    padding: 12px 14px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9a9a9a;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #F72585;
+    box-shadow: 0 0 0 3px rgba(247, 37, 133, 0.10);
+}
+
+.full-width {
+    margin-bottom: 34px;
+}
+
+.contact-send-btn {
+    min-width: 120px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 11px 34px;
+    background: #F72585;
+    color: #ffffff;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 18px rgba(247, 37, 133, 0.35);
+    transition: 0.25s ease;
+}
+
+.contact-send-btn:hover {
+    background: #d9166d;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   RIGHT CUSTOMER SERVICE COLUMN
+========================================================= */
+
+.contact-service-column {
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
+}
+
+.customer-service-card {
+    padding: 16px 22px 28px;
+}
+
+.service-info-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.service-info-row:last-child {
+    margin-bottom: 0;
+}
+
+.service-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-icon span {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.email-icon {
+    background: #fff3cf;
+    color: #F72585;
+}
+
+.call-icon {
+    background: #eaf3ff;
+    color: #1269c7;
+}
+
+.service-info-row h4 {
+    margin: 0 0 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222222;
+}
+
+.service-info-row p {
+    margin: 0 0 4px;
+    font-size: 12px;
+    color: #333333;
+}
+
+.order-action-card {
+    min-height: 50px;
+    padding: 0 20px 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    text-decoration: none;
+    color: #222222;
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    transition: 0.25s ease;
+}
+
+.order-action-card:hover {
+    color: #F72585;
+    transform: translateY(-2px);
+}
+
+.order-arrow {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid #222222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 300;
+    color: #222222;
+}
+
+.order-action-card:hover .order-arrow {
+    border-color: #F72585;
+    color: #F72585;
+}
+
+/* =========================================================
+   CONTACT FAQ SECTION
+========================================================= */
+
+.contact-faq-section {
+    padding: 35px 20px 60px;
+    background: #ffffff;
+}
+
+.contact-faq-container {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.contact-faq-heading {
+    margin: 0 0 22px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2E2E2E;
+}
+
+.contact-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-faq-item {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.contact-faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 17px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: #222222;
+}
+
+.contact-faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-arrow {
+    font-size: 18px;
+    line-height: 1;
+    color: #111111;
+    transition: transform 0.25s ease;
+}
+
+.contact-faq-item:not([open]) .faq-arrow {
+    transform: rotate(180deg);
+}
+
+.contact-faq-answer {
+    padding: 0 36px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333333;
+}
+
+@media (max-width: 768px) {
+    .contact-faq-section {
+        padding: 30px 15px 45px;
+    }
+
+    .contact-faq-heading {
+        font-size: 21px;
+    }
+
+    .contact-faq-item summary {
+        padding: 15px 18px;
+        font-size: 15px;
+    }
+
+    .contact-faq-answer {
+        padding: 0 22px 16px;
+        font-size: 13px;
+    }
+}
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 992px) {
+    .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .contact-service-column {
+        gap: 24px;
+    }
+
+    .contact-hero {
+        width: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-page-section {
+        padding: 35px 18px 45px;
+    }
+
+    .contact-form-card {
+        padding: 22px;
+    }
+
+    .form-row,
+    .single-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .contact-hero {
+        width: calc(100% - 24px);
+        margin-top: 20px;
+    }
+
+    .contact-hero-content h1 {
+        font-size: 24px;
+    }
+
+    .contact-hero-content p {
+        font-size: 14px;
+    }
+
+    .order-action-card {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-form-card,
+    .customer-service-card,
+    .order-action-card {
+        border-radius: 8px;
+    }
+
+    .service-info-row {
+        align-items: flex-start;
+    }
+
+    .service-icon {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+    }
+
+    .service-icon span {
+        font-size: 24px;
+    }
+
+    .contact-send-btn {
+        width: 100%;
+    }
+}

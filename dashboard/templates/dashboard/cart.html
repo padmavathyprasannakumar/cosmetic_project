@@ -1,0 +1,304 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Cart - Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}?v=2">
+{% endblock %}
+
+{% block content %}
+
+<div class="cart-page">
+
+    <div class="cart-left">
+        <h2>Your Cart</h2>
+        <p class="cart-subtitle">Review your selection before checkout</p>
+
+        {% if messages %}
+            <div class="cart-message-wrapper">
+                {% for message in messages %}
+                    <div class="cart-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if cart_items %}
+            <div class="cart-table">
+
+                <div class="cart-row cart-head">
+                    <div>Product</div>
+                    <div>Quantity</div>
+                    <div>Price</div>
+                    <div>Total</div>
+                </div>
+
+                {% for item in cart_items %}
+                    <div class="cart-row">
+
+                        <div class="cart-product">
+                            <span>{{ forloop.counter }}</span>
+
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                            {% else %}
+                                <img src="{% static 'images/no-image.png' %}" alt="No Image">
+                            {% endif %}
+
+                            <div>
+                                <h4>
+                                    {% if item.product.title %}
+                                        {{ item.product.title }}
+                                    {% else %}
+                                        {{ item.product.name }}
+                                    {% endif %}
+                                </h4>
+
+                                {% if item.is_session_offer %}
+                                    <p class="cart-offer-label">
+                                        {{ item.offer_label|default:"Buy 1 Get 1 Free" }}
+                                    </p>
+                                {% elif item.is_exclusive_offer %}
+                                    <p class="cart-offer-label">
+                                        {{ item.offer_label|default:"Exclusive Offer" }}
+                                    </p>
+                                {% elif item.product.brand %}
+                                    <p>{{ item.product.brand.name }}</p>
+                                {% else %}
+                                    <p>Glowify</p>
+                                {% endif %}
+
+                                {% if item.product.shade_name %}
+                                    <p class="cart-shade">
+                                        Shade: {{ item.product.shade_name }}
+                                    </p>
+                                {% endif %}
+
+                                {% if item.is_offer_claimed %}
+                                    <div class="cart-voucher-badge">
+                                        {% if item.voucher_code %}
+                                            Voucher Applied:
+                                            <strong>{{ item.voucher_code }}</strong>
+                                        {% else %}
+                                            Offer Applied
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                {% if item.line_discount %}
+                                    <p class="cart-saving-text">
+                                        You saved ₹{{ item.line_discount|floatformat:0 }}
+                                    </p>
+                                {% endif %}
+
+                                {% if item.is_session_offer %}
+                                    <form method="post" action="{% url 'dashboard:remove_offer_from_cart' item.product.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="remove-btn">
+                                            Remove
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="post" action="{% url 'dashboard:remove_from_cart' item.product.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="remove-btn">
+                                            Remove
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div>
+                            {% if item.is_session_offer %}
+                                <form
+                                    method="post"
+                                    action="{% url 'dashboard:update_offer_cart' item.product.id %}"
+                                    class="qty-box"
+                                >
+                                    {% csrf_token %}
+
+                                    <button type="submit" name="action" value="decrease">
+                                        −
+                                    </button>
+
+                                    <span>{{ item.quantity }}</span>
+
+                                    <button type="submit" name="action" value="increase">
+                                        +
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form
+                                    method="post"
+                                    action="{% url 'dashboard:update_cart' item.product.id %}"
+                                    class="qty-box"
+                                >
+                                    {% csrf_token %}
+
+                                    <button type="submit" name="action" value="decrease">
+                                        −
+                                    </button>
+
+                                    <span>{{ item.quantity }}</span>
+
+                                    <button type="submit" name="action" value="increase">
+                                        +
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <span class="cart-current-price">
+                                ₹{{ item.unit_price|floatformat:0 }}
+                            </span>
+
+                            {% if item.line_discount %}
+                                <span class="cart-old-price">
+                                    ₹{{ item.original_unit_price|floatformat:0 }}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <span class="cart-line-total">
+                                ₹{{ item.line_total|floatformat:0 }}
+                            </span>
+
+                            {% if item.line_discount %}
+                                <span class="cart-line-old-total">
+                                    ₹{{ item.line_original_total|floatformat:0 }}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            {% if offer_discount_total %}
+                <div class="cart-offer-section">
+                    <h3>Claimed Offers</h3>
+
+                    {% for item in cart_items %}
+                        {% if item.is_offer_claimed %}
+                            <div class="cart-offer-item">
+
+                                <div>
+                                    <strong>{{ item.product.title }}</strong>
+
+                                    {% if item.voucher_code %}
+                                        <p>
+                                            Voucher:
+                                            <span>{{ item.voucher_code }}</span>
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            Offer:
+                                            <span>{{ item.offer_label }}</span>
+                                        </p>
+                                    {% endif %}
+
+                                    <p>Quantity: {{ item.quantity }}</p>
+                                </div>
+
+                                <div>
+                                    <p>
+                                        ₹{{ item.line_total|floatformat:0 }}
+
+                                        {% if item.line_discount %}
+                                            <del>₹{{ item.line_original_total|floatformat:0 }}</del>
+                                        {% endif %}
+                                    </p>
+
+                                    {% if item.line_discount %}
+                                        <p class="cart-offer-saving">
+                                            You saved ₹{{ item.line_discount|floatformat:0 }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="empty-cart-box">
+                <p>Your cart is empty.</p>
+
+                <a href="{% url 'dashboard:shop' %}" class="continue-shopping-btn">
+                    Continue Shopping
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <aside class="cart-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-line">
+            <span>
+                {% if count %}
+                    {{ count }} Item selected
+                {% else %}
+                    {{ cart_items|length }} Item selected
+                {% endif %}
+            </span>
+        </div>
+
+        {% if original_subtotal and offer_discount_total %}
+            <div class="summary-line">
+                <span>Original Subtotal</span>
+                <strong>₹{{ original_subtotal|floatformat:0 }}</strong>
+            </div>
+        {% endif %}
+
+        <div class="summary-line">
+            <span>Subtotal</span>
+            <strong>₹{{ subtotal|floatformat:0 }}</strong>
+        </div>
+
+        {% if offer_discount_total %}
+            <div class="summary-line discount-line">
+                <span>Offer Discount</span>
+                <strong>-₹{{ offer_discount_total|floatformat:0 }}</strong>
+            </div>
+        {% endif %}
+
+        <div class="summary-line">
+            <span>Estimated Shipping</span>
+            <strong>₹{{ estimated_shipping|floatformat:0 }}</strong>
+        </div>
+
+        <div class="summary-line">
+            <span>GST</span>
+            <strong>₹{{ gst|floatformat:0 }}</strong>
+        </div>
+
+        <hr>
+
+        <div class="summary-line total-line">
+            <span>Total</span>
+            <strong>₹{{ total|floatformat:0 }}</strong>
+        </div>
+
+        {% if cart_items %}
+            <a href="{% url 'dashboard:checkout' %}" class="checkout-btn">
+                Proceed to Checkout
+            </a>
+        {% else %}
+            <a href="{% url 'dashboard:shop' %}" class="checkout-btn">
+                Shop Now
+            </a>
+        {% endif %}
+    </aside>
+
+</div>
+
+{% endblock %}

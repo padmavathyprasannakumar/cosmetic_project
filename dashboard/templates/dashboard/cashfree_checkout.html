@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Glowify Payment</title>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h2 {
+            margin-bottom: 30px;
+        }
+        #payBtn {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #payBtn:hover {
+            background-color: #ff4f41;
+        }
+    </style>
+</head>
+<body>
+    <h2>Redirecting to Cashfree Payment...</h2>
+    <button id="payBtn">Pay Now</button>
+
+    <script>
+        // Initialize Cashfree checkout
+        const cashfree = Cashfree({ mode: "{{ cashfree_mode }}" });
+
+        // Attach click event to pay button
+        document.getElementById("payBtn").addEventListener("click", function () {
+            cashfree.checkout({
+                paymentSessionId: "{{ payment_session_id }}",
+                redirectTarget: "_self"  // redirects back to your return_url after payment
+            });
+        });
+
+        // Auto-click to redirect immediately
+        document.getElementById("payBtn").click();
+    </script>
+</body>
+</html>

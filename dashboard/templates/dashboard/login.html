@@ -1,0 +1,94 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Login | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-left">
+        <img src="{% static 'images/auth-girl.png' %}" alt="Login">
+    </div>
+
+    <div class="auth-right">
+
+        <h2>Welcome Back !</h2>
+
+        <div class="auth-card">
+            <h3>Signin to your Account</h3>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="auth-message {{ message.tags }}">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <label>Email Id</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="nar@gmail.com"
+                    required
+                >
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+                >
+
+                <div class="auth-row">
+                    <label class="remember-label">
+                        <input type="checkbox" name="remember_me" checked>
+                        Remember me
+                    </label>
+
+                    <a href="#">Forget Password?</a>
+                </div>
+
+                <button type="submit" class="auth-main-btn">
+                    Login
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                Don’t have an account?
+                <a href="{% url 'dashboard:register' %}?next={{ next|urlencode }}">
+                    Signup
+                </a>
+            </p>
+
+            <p class="instant-text">Instant Login</p>
+
+            <div class="social-login-row">
+                <button type="button">
+                    <span>G</span>
+                    Continue With google
+                </button>
+
+                <button type="button">
+                    <span>f</span>
+                    Continue With facebook
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

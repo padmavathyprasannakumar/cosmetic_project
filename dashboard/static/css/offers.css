@@ -1,0 +1,764 @@
+/* =========================================================
+   OFFERS PAGE
+========================================================= */
+
+.offers-page {
+    max-width: 2500px;
+    margin: 0 auto;
+    padding: 30px 10px 55px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* =========================================================
+   OFFER IMAGE CAROUSEL
+========================================================= */
+
+.offer-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 2500px;
+    margin: 0 auto;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 8px 26px rgba(247, 37, 133, 0.18);
+}
+
+.offer-carousel-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.45s ease-in-out;
+}
+
+.offer-slide {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    background: #fff4f8;
+}
+
+.offer-slide img {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    display: block;
+}
+
+/* =========================================================
+   CAROUSEL ARROWS
+========================================================= */
+
+.offer-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid #222222;
+    background: rgba(255, 255, 255, 0.75);
+    color: #222222;
+    font-size: 46px;
+    line-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    z-index: 10;
+}
+
+.offer-arrow:hover {
+    background: #F72585;
+    color: #ffffff;
+    border-color: #F72585;
+    transform: translateY(-50%) scale(1.06);
+}
+
+.offer-arrow-left {
+    left: 22px;
+}
+
+.offer-arrow-right {
+    right: 22px;
+}
+
+/* =========================================================
+   CAROUSEL DOTS
+========================================================= */
+
+.offer-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    z-index: 12;
+}
+
+.offer-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    padding: 0;
+    transition: width 0.25s ease, border-radius 0.25s ease, background 0.25s ease;
+}
+
+.offer-dot.active {
+    width: 28px;
+    border-radius: 20px;
+    background: #F72585;
+}
+
+/* =========================================================
+   EXCLUSIVE CLAIM OFFER SECTION
+========================================================= */
+
+.exclusive-offers-section {
+    max-width: 1200px;
+    margin: 65px auto 0;
+    padding: 0 10px;
+}
+
+.exclusive-offer-card {
+    display: grid;
+    grid-template-columns: 58% 42%;
+    align-items: center;
+    gap: 55px;
+    margin-bottom: 75px;
+}
+
+.exclusive-offer-card:last-child {
+    margin-bottom: 0;
+}
+
+.exclusive-offer-left {
+    width: 100%;
+}
+
+.exclusive-offer-left img {
+    width: 100%;
+    height: 390px;
+    object-fit: cover;
+    display: block;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(247, 37, 133, 0.16);
+}
+
+.exclusive-no-image {
+    width: 100%;
+    height: 390px;
+    border-radius: 18px;
+    background: #fff4f8;
+    border: 1px dashed #F72585;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #F72585;
+}
+
+.exclusive-offer-right {
+    width: 100%;
+}
+
+.exclusive-offer-right h2 {
+    margin: 0 0 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #333333;
+    line-height: 1.35;
+}
+
+.exclusive-offer-description {
+    max-width: 560px;
+    margin: 0 0 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    line-height: 1.5;
+    color: #333333;
+}
+
+.exclusive-offer-price-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.exclusive-offer-price {
+    color: #F72585;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.exclusive-offer-old-price {
+    color: #b8b8b8;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: line-through;
+}
+
+.exclusive-offer-save {
+    color: #333333;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.exclusive-voucher-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #fff4fa;
+    border: 1px solid #F72585;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #333333;
+}
+
+.exclusive-voucher-box strong {
+    color: #F72585;
+    letter-spacing: 0.6px;
+}
+
+.exclusive-offer-form {
+    width: 100%;
+}
+
+.claim-offer-btn {
+    width: 100%;
+    max-width: 385px;
+    height: 54px;
+    border: none;
+    outline: none;
+    background: #F72585;
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 18px rgba(247, 37, 133, 0.28);
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.claim-offer-btn:hover {
+    background: #d9166d;
+    transform: translateY(-3px);
+}
+
+/* =========================================================
+   BUY 1 GET 1 FREE SECTION
+========================================================= */
+
+.bogo-section {
+    max-width: 1200px;
+    margin: 55px auto 0;
+}
+
+.bogo-heading-box {
+    text-align: center;
+    margin-bottom: 34px;
+}
+
+.bogo-heading-box h2 {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #111111;
+}
+
+.bogo-products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.bogo-product-card {
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #ffd8e8;
+    box-shadow: 0 8px 24px rgba(247, 37, 133, 0.12);
+    transition: 0.3s ease;
+}
+
+.bogo-product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 34px rgba(247, 37, 133, 0.2);
+}
+
+.bogo-product-image {
+    width: 100%;
+    height: 260px;
+    background: #fff4f8;
+    overflow: hidden;
+}
+
+.bogo-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bogo-no-image {
+    width: 100%;
+    height: 100%;
+    background: #fff4f8;
+    border-bottom: 1px dashed #F72585;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F72585;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+.bogo-product-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.bogo-product-content h3 {
+    margin: 0 0 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.bogo-product-desc {
+    min-height: 48px;
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666666;
+}
+
+.bogo-price-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.bogo-discount-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #F72585;
+}
+
+.bogo-original-price {
+    font-size: 15px;
+    font-weight: 600;
+    color: #888888;
+    text-decoration: line-through;
+}
+
+.bogo-cart-btn {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: #F72585;
+    color: #ffffff;
+    padding: 13px 20px;
+    border-radius: 28px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.bogo-cart-btn:hover {
+    background: #d9166d;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   OFFERS SUBSCRIBE / INNER CIRCLE SECTION
+========================================================= */
+
+.offers-subscribe-section {
+    width: 100%;
+    padding: 55px 20px 20px;
+    background: #ffffff;
+}
+
+.offers-subscribe-box {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 35px 35px;
+    border-radius: 14px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+.offers-subscribe-box h2 {
+    margin: 0 0 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.offers-subscribe-box p {
+    margin: 0 0 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.offers-subscribe-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.offers-subscribe-form input[type="email"] {
+    width: 100%;
+    height: 52px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    padding: 0 18px;
+    font-size: 16px;
+    color: #333333;
+    background: #ffffff;
+}
+
+.offers-subscribe-form input[type="email"]::placeholder {
+    color: #9ca3af;
+}
+
+.offers-subscribe-form button {
+    min-width: 180px;
+    height: 52px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #222222;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.offers-subscribe-form button:hover {
+    background: #111111;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   SUBSCRIBE POPUP MESSAGE
+========================================================= */
+
+.subscribe-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subscribe-popup-box {
+    width: 90%;
+    max-width: 420px;
+    padding: 28px 24px;
+    background: #ffffff;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.subscribe-popup-message {
+    margin: 0 0 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #222222;
+}
+
+.subscribe-popup-message.success {
+    color: #16a34a;
+}
+
+.subscribe-popup-message.error {
+    color: #dc2626;
+}
+
+.subscribe-popup-message.info {
+    color: #2563eb;
+}
+
+.subscribe-popup-box button {
+    border: none;
+    outline: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    background: #F72585;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.subscribe-popup-box button:hover {
+    background: #d9166d;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-offers {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 50px 25px;
+    background: #ffffff;
+    border: 1px solid #ffd6e6;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(247, 37, 133, 0.12);
+}
+
+.empty-offers h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    margin: 0 0 10px;
+    color: #111111;
+}
+
+.empty-offers p {
+    color: #555555;
+    margin: 0;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+    .offer-slide img {
+        height: 390px;
+    }
+
+    .exclusive-offer-card {
+        gap: 40px;
+    }
+
+    .exclusive-offer-right h2 {
+        font-size: 28px;
+    }
+
+    .exclusive-offer-description {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 992px) {
+    .bogo-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bogo-heading-box h2 {
+        font-size: 32px;
+    }
+
+    .exclusive-offer-card {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .exclusive-offer-left img,
+    .exclusive-no-image {
+        height: 330px;
+    }
+
+    .exclusive-offer-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .exclusive-offer-price-row {
+        justify-content: center;
+    }
+
+    .claim-offer-btn {
+        max-width: 340px;
+    }
+}
+
+@media (max-width: 768px) {
+    .offers-page {
+        padding: 10px 0 35px;
+    }
+
+    .offer-carousel {
+        border-radius: 10px;
+    }
+
+    .offer-slide img {
+        height: 260px;
+    }
+
+    .offer-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 38px;
+        line-height: 30px;
+    }
+
+    .offer-arrow-left {
+        left: 10px;
+    }
+
+    .offer-arrow-right {
+        right: 10px;
+    }
+
+    .offer-dots {
+        bottom: 12px;
+    }
+
+    .exclusive-offers-section {
+        margin-top: 45px;
+        padding: 0 15px;
+    }
+
+    .exclusive-offer-card {
+        margin-bottom: 55px;
+    }
+
+    .exclusive-offer-right h2 {
+        font-size: 25px;
+    }
+
+    .exclusive-offer-description {
+        font-size: 17px;
+    }
+
+    .bogo-section {
+        margin-top: 40px;
+        padding: 0 15px;
+    }
+
+    .bogo-products-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .bogo-heading-box h2 {
+        font-size: 28px;
+    }
+
+    .bogo-product-image {
+        height: 240px;
+    }
+
+    .offers-subscribe-box {
+        padding: 30px 22px;
+    }
+
+    .offers-subscribe-form {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .offers-subscribe-form button {
+        width: 100%;
+    }
+
+    .offers-subscribe-box h2 {
+        font-size: 24px;
+    }
+
+    .offers-subscribe-box p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .offer-slide img {
+        height: 210px;
+    }
+
+    .bogo-heading-box h2 {
+        font-size: 25px;
+    }
+
+    .bogo-product-content h3 {
+        font-size: 18px;
+    }
+
+    .exclusive-offer-left img,
+    .exclusive-no-image {
+        height: 240px;
+        border-radius: 14px;
+    }
+
+    .exclusive-offer-right h2 {
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+
+    .exclusive-offer-description {
+        font-size: 15px;
+        margin-bottom: 18px;
+    }
+
+    .exclusive-offer-price-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .exclusive-offer-price {
+        font-size: 20px;
+    }
+
+    .exclusive-offer-old-price {
+        font-size: 17px;
+    }
+
+    .exclusive-offer-save {
+        font-size: 15px;
+    }
+
+    .exclusive-voucher-box {
+        font-size: 14px;
+        padding: 8px 13px;
+    }
+
+    .claim-offer-btn {
+        height: 48px;
+        font-size: 16px;
+    }
+
+    .offers-subscribe-section {
+        padding: 40px 12px 10px;
+    }
+}

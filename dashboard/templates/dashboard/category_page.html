@@ -1,0 +1,436 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if page_heading %}
+        {{ page_heading }} | Glowify
+    {% elif page_item %}
+        {{ page_item.heading }} | Glowify
+    {% else %}
+        Shop | Glowify
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/eyemakeup.css' %}">
+<link rel="stylesheet" href="{% static 'css/subscribe_banner.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="shop-page">
+
+    <aside class="filter-sidebar">
+        <div class="filter-title">
+            <span class="filter-icon">☰</span>
+            <strong>Filter</strong>
+        </div>
+
+        <form method="get" class="filter-form" id="filterForm">
+
+            {% if search_query %}
+                <input type="hidden" name="q" value="{{ search_query }}">
+            {% endif %}
+
+            {% if sort_by %}
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+            {% endif %}
+
+            <div class="filter-box">
+                <button type="button" class="filter-heading">
+                    <span>Brand</span>
+                    <span class="arrow">⌃</span>
+                </button>
+
+                <div class="filter-body">
+                    {% for brand in brands %}
+                        <label class="filter-option">
+                            <input
+                                type="checkbox"
+                                name="brand"
+                                value="{{ brand.id }}"
+                                {% if brand.id|stringformat:"s" in selected_brands %}checked{% endif %}
+                            >
+                            <span>{{ brand.name }}</span>
+                        </label>
+                    {% empty %}
+                        <p class="empty-filter">No brands</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-box">
+                <button type="button" class="filter-heading">
+                    <span>Color</span>
+                    <span class="arrow">⌃</span>
+                </button>
+
+                <div class="filter-body">
+                    {% for color in colors %}
+                        <label class="filter-option">
+                            <input
+                                type="checkbox"
+                                name="color"
+                                value="{{ color.id }}"
+                                {% if color.id|stringformat:"s" in selected_colors %}checked{% endif %}
+                            >
+                            <span>{{ color.name }}</span>
+                        </label>
+                    {% empty %}
+                        <p class="empty-filter">No colors</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-box">
+                <button type="button" class="filter-heading">
+                    <span>Discount</span>
+                    <span class="arrow">
+                        {% if selected_discounts %}⌃{% else %}⌄{% endif %}
+                    </span>
+                </button>
+
+                <div class="filter-body {% if not selected_discounts %}is-collapsed{% endif %}">
+                    {% for discount in discounts %}
+                        <label class="filter-option">
+                            <input
+                                type="checkbox"
+                                name="discount"
+                                value="{{ discount.id }}"
+                                {% if discount.id|stringformat:"s" in selected_discounts %}checked{% endif %}
+                            >
+                            <span>{{ discount.label }}</span>
+                        </label>
+                    {% empty %}
+                        <p class="empty-filter">No discount</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-box">
+                <button type="button" class="filter-heading">
+                    <span>Price</span>
+                    <span class="arrow">
+                        {% if selected_prices %}⌃{% else %}⌄{% endif %}
+                    </span>
+                </button>
+
+                <div class="filter-body {% if not selected_prices %}is-collapsed{% endif %}">
+                    {% for price_range in price_ranges %}
+                        <label class="filter-option">
+                            <input
+                                type="checkbox"
+                                name="price"
+                                value="{{ price_range.id }}"
+                                {% if price_range.id|stringformat:"s" in selected_prices %}checked{% endif %}
+                            >
+                            <span>{{ price_range.label }}</span>
+                        </label>
+                    {% empty %}
+                        <p class="empty-filter">No price ranges</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="apply-filter-btn">
+                Apply Filter
+            </button>
+
+            {% if page_item %}
+                <a href="{% url 'dashboard:category_page' page_item.id %}" class="clear-filter-btn">
+                    Clear
+                </a>
+            {% else %}
+                <a href="{% url 'dashboard:shop' %}" class="clear-filter-btn">
+                    Clear
+                </a>
+            {% endif %}
+
+        </form>
+    </aside>
+
+    <section class="product-section">
+
+        <div class="product-topbar">
+            <h2>
+                {% if page_heading %}
+                    {{ page_heading }}
+                {% elif page_item %}
+                    {{ page_item.heading }}
+                {% else %}
+                    Shop
+                {% endif %}
+            </h2>
+
+            <form method="get" class="sort-form">
+
+                {% for brand in selected_brands %}
+                    <input type="hidden" name="brand" value="{{ brand }}">
+                {% endfor %}
+
+                {% for color in selected_colors %}
+                    <input type="hidden" name="color" value="{{ color }}">
+                {% endfor %}
+
+                {% for discount in selected_discounts %}
+                    <input type="hidden" name="discount" value="{{ discount }}">
+                {% endfor %}
+
+                {% for price in selected_prices %}
+                    <input type="hidden" name="price" value="{{ price }}">
+                {% endfor %}
+
+                {% if search_query %}
+                    <input type="hidden" name="q" value="{{ search_query }}">
+                {% endif %}
+
+                <select name="sort" onchange="this.form.submit()">
+                    <option value="">Sort By</option>
+
+                    <option value="latest" {% if sort_by == 'latest' %}selected{% endif %}>
+                        Latest
+                    </option>
+
+                    <option value="price_low" {% if sort_by == 'price_low' or sort_by == 'price-low' %}selected{% endif %}>
+                        Price: Low to High
+                    </option>
+
+                    <option value="price_high" {% if sort_by == 'price_high' or sort_by == 'price-high' %}selected{% endif %}>
+                        Price: High to Low
+                    </option>
+
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>
+                        Rating
+                    </option>
+                </select>
+            </form>
+        </div>
+
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="product-card">
+
+                    <a href="{% url 'dashboard:product_detail' product.id %}" class="product-image product-image-link">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="no-product-image">No Image</div>
+                        {% endif %}
+                        <span class="product-hover-description">
+                            {{ product.display_description|truncatechars:110 }}
+                        </span>
+                    </a>
+
+                    <div class="product-info">
+
+                        <h3>
+                            <a href="{% url 'dashboard:product_detail' product.id %}" class="product-title-link">
+                                {% if product.brand %}
+                                    {{ product.brand.name }}
+                                {% else %}
+                                    {{ product.name }}
+                                {% endif %}
+                            </a>
+                        </h3>
+
+                        <p>
+                            {% if product.description %}
+                                {{ product.short_description }}...
+                            {% elif product.shade_name %}
+                                {{ product.shade_name }}
+                            {% else %}
+                                {{ product.name }}
+                            {% endif %}
+                        </p>
+
+                        <div class="rating">
+                            ⭐ {{ product.rating }} ({{ product.reviews_count }} Reviews)
+                        </div>
+
+                        <div class="price">
+                            Price: ₹{{ product.price|floatformat:0 }}
+                        </div>
+
+                        <div class="product-actions">
+
+                            <form method="post" action="{% url 'dashboard:add_to_cart' product.id %}" class="cart-form">
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="quantity"
+                                    value="1"
+                                >
+
+                                <input
+                                    type="hidden"
+                                    name="next"
+                                    value="{{ request.get_full_path }}"
+                                >
+
+                                <button type="submit" class="add-cart-btn">
+                                    Add to cart
+                                </button>
+                            </form>
+
+                            <form method="post" action="{% url 'dashboard:toggle_wishlist' product.id %}" class="wishlist-form">
+                                {% csrf_token %}
+
+                                <input
+                                    type="hidden"
+                                    name="next"
+                                    value="{{ request.get_full_path }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="wishlist-toggle-btn {% if product.id in wishlist_product_ids %}active{% endif %}"
+                                    aria-label="Toggle wishlist"
+                                    title="Add to wishlist"
+                                >
+                                    <span class="heart-icon">❤</span>
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            {% empty %}
+                <p class="no-products">No products found.</p>
+            {% endfor %}
+        </div>
+
+
+        <!-- =========================
+             CATEGORY SUBSCRIBE BANNER WITH LEFT IMAGE
+             Left image comes from Django Admin.
+             This image will show only on category/shop pages.
+        ========================= -->
+        {% if subscribe_banner %}
+<section class="category-subscribe-section">
+    <div
+        class="category-subscribe-box"style="background:
+         {{ subscribe_banner.background_color|default:'linear-gradient(135deg, #f58fba, #f72585)' }};"
+    >
+
+        <div class="category-subscribe-left">
+            {% if subscribe_banner.left_image %}
+                <img
+                    src="{{ subscribe_banner.left_image.url }}"
+                    alt="{{ subscribe_banner.heading }}"
+                >
+            {% endif %}
+        </div>
+
+        <div class="category-subscribe-content">
+            <h2>{{ subscribe_banner.heading }}</h2>
+
+            <p>{{ subscribe_banner.description }}</p>
+
+            <form
+                method="post"
+                action="{% url 'dashboard:subscribe_user' %}"
+                class="category-subscribe-form"
+            >
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="next"
+                    value="{{ request.get_full_path }}"
+                >
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="{{ subscribe_banner.email_placeholder|default:'Enter Your Email' }}"
+                    required
+                >
+
+                <button type="submit">
+                    {{ subscribe_banner.button_text|default:'Register' }}
+                </button>
+            </form>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+    </section>
+</div>
+
+
+<!-- =========================
+     SUBSCRIBE POPUP MESSAGE
+========================= -->
+{% if messages %}
+<div class="subscribe-popup-overlay" id="subscribePopup">
+    <div class="subscribe-popup-box">
+
+        {% for message in messages %}
+            <p class="subscribe-popup-message {{ message.tags }}">
+                {{ message }}
+            </p>
+        {% endfor %}
+
+        <button type="button" onclick="closeSubscribePopup()">
+            OK
+        </button>
+
+    </div>
+</div>
+{% endif %}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterForm = document.getElementById("filterForm");
+        const filterBoxes = document.querySelectorAll(".filter-box");
+        const filterInputs = document.querySelectorAll('#filterForm input[type="checkbox"]');
+
+        filterBoxes.forEach(function (box) {
+            const button = box.querySelector(".filter-heading");
+            const body = box.querySelector(".filter-body");
+            const arrow = box.querySelector(".arrow");
+
+            if (!button || !body) return;
+
+            button.addEventListener("click", function () {
+                body.classList.toggle("is-collapsed");
+
+                if (arrow) {
+                    arrow.textContent = body.classList.contains("is-collapsed") ? "⌄" : "⌃";
+                }
+            });
+        });
+
+        filterInputs.forEach(function (input) {
+            input.addEventListener("change", function () {
+                if (filterForm) {
+                    filterForm.submit();
+                }
+            });
+        });
+
+
+        const popup = document.getElementById("subscribePopup");
+
+        if (popup) {
+            setTimeout(function () {
+                popup.style.display = "none";
+            }, 3000);
+        }
+    });
+
+    function closeSubscribePopup() {
+        const popup = document.getElementById("subscribePopup");
+
+        if (popup) {
+            popup.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}

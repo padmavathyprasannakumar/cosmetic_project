@@ -1,0 +1,135 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | Glowify{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<section class="product-detail-page">
+    <div class="detail-hero">
+        <div class="detail-image-box">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div>No Image</div>
+            {% endif %}
+        </div>
+
+        <div class="detail-content">
+            <h1>
+                {% if product.brand %}{{ product.brand.name }} - {% endif %}{{ product.name }}
+            </h1>
+
+            <div class="detail-rating">⭐ {{ product.rating }} ({{ product.reviews_count }} Reviews)</div>
+
+            <p class="detail-tagline">{{ product.display_tagline }}</p>
+
+            <div class="detail-description">
+                {{ product.display_description|linebreaks }}
+            </div>
+
+            <p class="detail-price">Price: ₹{{ product.price|floatformat:0 }}</p>
+
+            {% if product.colors.all %}
+                <p class="shade-title">Shade</p>
+                <div class="shade-list">
+                    {% for color in product.colors.all %}
+                        <span class="shade-dot" title="{{ color.name }}" style="background: {{ color.hex_code|default:'#f7a2b7' }};"></span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'dashboard:add_to_cart' product.id %}" class="detail-actions">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+                <div class="quantity-box">
+                    <button type="button" onclick="changeQty(-1)">-</button>
+                    <input id="qtyInput" type="number" name="quantity" value="1" min="1">
+                    <button type="button" onclick="changeQty(1)">+</button>
+                </div>
+
+                <button type="submit" class="detail-add-cart">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="detail-tabs">
+        <button type="button" class="detail-tab-btn active" data-tab="description">Product Description</button>
+        <button type="button" class="detail-tab-btn" data-tab="how-to-use">How to Use</button>
+        <button type="button" class="detail-tab-btn" data-tab="benefits">Benefits</button>
+    </div>
+
+    <div id="description" class="detail-tab-panel active">
+        {{ product.display_description|linebreaks }}
+    </div>
+
+    <div id="how-to-use" class="detail-tab-panel">
+        {{ product.display_how_to_use|linebreaks }}
+    </div>
+
+    <div id="benefits" class="detail-tab-panel">
+        <ol class="benefit-list">
+            {% for benefit in product.benefits_list %}
+                <li>{{ benefit }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    {% if related_products %}
+        <div class="related-section">
+            <h2>You may also Like</h2>
+
+            <div class="related-grid">
+                {% for item in related_products %}
+                    <div class="related-card">
+                        <a href="{% url 'dashboard:product_detail' item.id %}">
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                            {% endif %}
+                        </a>
+                        <h3>{{ item.name }}</h3>
+                        <a href="{% url 'dashboard:product_detail' item.id %}">Shop Now</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function changeQty(step) {
+        const input = document.getElementById('qtyInput');
+        const current = parseInt(input.value || '1', 10);
+        const next = Math.max(1, current + step);
+        input.value = next;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.detail-tab-btn');
+        const panels = document.querySelectorAll('.detail-tab-panel');
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const tabId = button.dataset.tab;
+
+                buttons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                panels.forEach(function (panel) {
+                    panel.classList.remove('active');
+                });
+
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %}

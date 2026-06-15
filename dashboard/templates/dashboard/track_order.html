@@ -1,0 +1,112 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Track Order{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/track_order.css' %}?v={{ version }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="track-page-wrapper">
+
+    <div class="track-left">
+
+        {% for item in order.items.all %}
+        <div class="tracking-card">
+
+            <div class="product-header">
+                <h2>{{ item.title }}</h2>
+                <div class="header-circle"></div>
+            </div>
+
+            <div class="progress-wrapper">
+
+                {% for step in tracking_steps %}
+                <div class="progress-step {% if step.key in completed_keys %}completed{% endif %}">
+                    <div class="step-circle">
+                        <span>✓</span>
+                    </div>
+                    <p>{{ step.label }}</p>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <p class="track-message">
+                {{ status_message }}
+            </p>
+
+            <div class="map-box">
+                <img src="{% static 'images/track-map.png' %}" alt="Delivery Map">
+
+                <div class="map-pin">
+                    <div class="pin-circle">
+                        <span>🚚</span>
+                    </div>
+                </div>
+
+                <a 
+                    href="https://www.google.com/maps/search/?api=1&query={{ map_query }}" 
+                    target="_blank" 
+                    class="view-map-btn"
+                >
+                    🗺 View Live Map
+                </a>
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="tracking-card">
+            <div class="product-header">
+                <h2>No product found</h2>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="track-actions">
+        <a href="{% url 'dashboard:home' %}" class="continue-shopping-btn">
+            Continue Shopping
+        </a>
+    </div>
+
+
+    </div>
+
+    <div class="track-right">
+
+        <div class="delivery-card">
+            <h3>Delivery Details</h3>
+
+            <div class="detail-block">
+                <p class="detail-label">Order Number</p>
+                {% if order.order_number %}
+                <p class="detail-value">#{{ order.order_number }}</p>
+                {% else %}
+                <p class="detail-value">#{{ order.id }}</p>
+                {% endif %}
+            </div>
+
+            <div class="detail-block">
+                <p class="detail-label">Shipping Address</p>
+                <p class="detail-value">
+                    {{ order.address }}<br>
+                    {{ order.city }},<br>
+                    {{ order.state }}<br>
+                    {{ order.pin_code }}
+                </p>
+            </div>
+
+            <div class="detail-block">
+                <p class="detail-label">Shipping Method</p>
+                <p class="detail-value">
+                    {{ order.shipping_method|default:"Standard Delivery (3-5 Business days)" }}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Order Success{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/order_success.css' %}?v={{ version }}">
+{% endblock %}
+
+{% block content %}
+<div class="success-wrapper">
+
+    <!-- Left Section -->
+    <div class="left-section">
+
+        <h1 class="thank-title">Thank you for Your Purchase !</h1>
+
+        <div class="order-banner">
+            {% if order.order_number %}
+            <h3>Order No #{{ order.order_number }}</h3>
+            {% else %}
+            <h3>Order No #{{ order.id }}</h3>
+            {% endif %}
+            <p class="order-date">{{ order.created_at|date:"M d, Y" }} at {{ order.created_at|time:"h:i A" }}</p>
+        </div>
+
+        <h2 class="billing-title">Billing Address:</h2>
+        <div class="billing-info">
+            <p><span>Name</span>: {{ order.first_name }} {{ order.last_name }}</p>
+            <p><span>Address</span>: {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pin_code }}</p>
+            <p><span>Phone No</span>: {{ order.mobile_no }}</p>
+        </div>
+
+        <div class="delivery-section">
+            <div class="road">
+                <div class="truck">
+                    <div class="wheel left"></div>
+                    <div class="wheel right"></div>
+                </div>
+            </div>
+            <div class="delivery-text">
+                <h4>Estimated Delivery</h4>
+                <p>Thursday, March 03rd</p>
+                <small>via premium express courier</small>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard:track_order' order.id %}" class="track-btn">Track Order</a>
+        <a href="{% url 'dashboard:home' %}" style="color:#F72585; font-weight:600;">Continue Shopping</a>
+
+    </div>
+
+    <!-- Right Section -->
+    <div class="summary-card">
+        <h2>Order Summary</h2>
+
+        {% for item in order.items.all %}
+        <div class="order-item">
+            {% if item.product and item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.title }}">
+            {% else %}
+            <img src="{% static 'dashboard/images/no-image.png' %}" alt="{{ item.title }}">
+            {% endif %}
+
+            <div class="item-details">
+                <h4>{{ item.title }}</h4>
+                <p>Shade - {{ item.shade_name|default:"N/A" }}</p>
+                <p>Qty: {{ item.quantity }}</p>
+            </div>
+
+            <div class="item-price">Price: ₹{{ item.line_total }}</div>
+        </div>
+        {% empty %}
+        <p>No items found in this order.</p>
+        {% endfor %}
+
+        <div class="summary-line">
+            <div class="price-row"><span>Subtotal</span><span>₹{{ order.subtotal }}</span></div>
+            <div class="price-row"><span>Shipping</span><span>₹{{ order.shipping_cost }}</span></div>
+            <div class="price-row"><span>GST</span><span>₹{{ order.gst }}</span></div>
+            <div class="price-row total-row"><span>Total</span><span>₹{{ order.total }}</span></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

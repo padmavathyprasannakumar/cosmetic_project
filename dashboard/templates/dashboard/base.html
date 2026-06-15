@@ -1,0 +1,338 @@
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Glowify{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}?v=30">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=22">
+    {% block extra_css %}{% endblock %}
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <!-- LOGO -->
+            <div class="navbar-logo">
+                <a href="{% url 'dashboard:home' %}">
+                    {% if site_logo and site_logo.image %}
+                    <img src="{{ site_logo.image.url }}" alt="Glowify Logo">
+                    {% else %}
+                    <span>Glowify</span>
+                    {% endif %}
+                </a>
+            </div>
+
+            <!-- DYNAMIC SEARCH -->
+            <form class="search-bar" method="get"
+                action="{% if page_item or subcategory %}{{ request.path }}{% else %}{% url 'dashboard:shop' %}{% endif %}"
+                id="globalSearchForm">
+                {% for brand in selected_brands %}
+                <input type="hidden" name="brand" value="{{ brand }}">
+                {% endfor %}
+
+                {% for color in selected_colors %}
+                <input type="hidden" name="color" value="{{ color }}">
+                {% endfor %}
+
+                {% for discount in selected_discounts %}
+                <input type="hidden" name="discount" value="{{ discount }}">
+                {% endfor %}
+
+                {% for price in selected_prices %}
+                <input type="hidden" name="price" value="{{ price }}">
+                {% endfor %}
+
+                {% if sort_by %}
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                {% endif %}
+
+                <input type="text" name="q" id="globalSearchInput" value="{{ request.GET.q|default:'' }}"
+                    placeholder="{{ search_placeholder|default:'Search products...' }}" autocomplete="off">
+            </form>
+
+            <!-- NAVBAR LINKS -->
+            <div class="navbar-links">
+
+                {% for link in navbar_links %}
+
+                {% if link.name|lower == 'home' %}
+
+                <a href="{% url 'dashboard:home' %}" class="nav-link">
+                    {{ link.name }}
+                </a>
+
+                {% elif link.name|lower == 'shop' %}
+
+                <div class="nav-item-dropdown">
+                    <a href="{% url 'dashboard:shop' %}" class="nav-link">
+                        {{ link.name }}
+                    </a>
+
+                    <div class="dropdown-content">
+                        {% if category_heading %}
+                        <h4 class="dropdown-heading">
+                            {{ category_heading.heading }}
+                        </h4>
+
+                        <ul class="dropdown-list">
+                            {% for sub in category_heading.subcategories.all %}
+                            {% if sub.is_active %}
+                            <li>
+                                <a href="{% url 'dashboard:category_page' sub.id %}">
+                                    {{ sub.page_name }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% empty %}
+                            <li>
+                                <a href="{% url 'dashboard:shop' %}">
+                                    All Products
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="{% url 'dashboard:shop' %}">
+                                    All Products
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% elif link.name|lower == 'offers' %}
+
+                <a href="{% url 'dashboard:offers' %}" class="nav-link">
+                    {{ link.name }}
+                </a>
+
+                {% elif link.name|lower == 'about' %}
+
+                <a href="{% url 'dashboard:about' %}" class="nav-link">
+                    {{ link.name }}
+                </a>
+
+                {% elif link.name|lower == 'contact' %}
+
+                <a href="{% url 'dashboard:contact' %}" class="nav-link">
+                    {{ link.name }}
+                </a>
+
+                {% else %}
+
+                <a href="{{ link.url|default:'#' }}" class="nav-link">
+                    {{ link.name }}
+                </a>
+
+                {% endif %}
+
+                {% empty %}
+
+                <a href="{% url 'dashboard:home' %}" class="nav-link">
+                    Home
+                </a>
+
+                <div class="nav-item-dropdown">
+                    <a href="{% url 'dashboard:shop' %}" class="nav-link">
+                        Shop
+                    </a>
+
+                    <div class="dropdown-content">
+                        {% if category_heading %}
+                        <h4 class="dropdown-heading">
+                            {{ category_heading.heading }}
+                        </h4>
+
+                        <ul class="dropdown-list">
+                            {% for sub in category_heading.subcategories.all %}
+                            {% if sub.is_active %}
+                            <li>
+                                <a href="{% url 'dashboard:category_page' sub.id %}">
+                                    {{ sub.page_name }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% empty %}
+                            <li>
+                                <a href="{% url 'dashboard:shop' %}">
+                                    All Products
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="{% url 'dashboard:shop' %}">
+                                    All Products
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <a href="{% url 'dashboard:offers' %}" class="nav-link">
+                    Offers
+                </a>
+
+                <a href="{% url 'dashboard:about' %}" class="nav-link">
+                    About
+                </a>
+
+                <a href="{% url 'dashboard:contact' %}" class="nav-link">
+                    Contact
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+            <!-- NAVBAR ICONS -->
+            <div class="navbar-icons">
+
+                <!-- CART -->
+                <div class="navbar-cart">
+                    <a href="{% url 'dashboard:cart' %}" class="navbar-icon-link">
+                        <img src="{% static 'icons/carticon.png' %}" alt="Cart">
+                        <span class="cart-count">
+                            {{ cart_count|default:0 }}
+                        </span>
+                    </a>
+                </div>
+
+                <!-- WISHLIST -->
+                <div class="navbar-wishlist">
+                    <a href="{% url 'dashboard:wishlist' %}" class="navbar-icon-link">
+                        <img src="{% static 'icons/wishlisticon.png' %}" alt="Wishlist">
+                        <span class="wishlist-count">
+                            {{ wishlist_count|default:0 }}
+                        </span>
+                    </a>
+                </div>
+
+                <!-- USER / PROFILE -->
+                <div class="navbar-user-area">
+
+                    {% if request.user.is_authenticated %}
+                    <div class="navbar-profile-dropdown">
+
+                        <a href="{% url 'dashboard:profile' %}" class="navbar-welcome-user">
+
+                            <span class="navbar-user-avatar">
+                                <img src="{% static 'icons/profile-icon.png' %}" alt="Profile">
+                            </span>
+
+                            <span class="navbar-welcome-text">
+                                Welcome,
+                                {% if request.user.profile.full_name %}
+                                {{ request.user.profile.full_name|truncatechars:14 }}
+                                {% elif request.user.first_name %}
+                                {{ request.user.first_name }}
+                                {% else %}
+                                {{ request.user.username|truncatechars:14 }}
+                                {% endif %}
+                            </span>
+
+                        </a>
+
+                        <div class="navbar-profile-menu">
+                            <a href="{% url 'dashboard:profile' %}">
+                                My Profile
+                            </a>
+
+                            <a href="{% url 'dashboard:cart' %}">
+                                My Cart
+                            </a>
+
+                            <a href="{% url 'dashboard:wishlist' %}">
+                                My Wishlist
+                            </a>
+
+                            <a href="{% url 'dashboard:logout' %}" class="navbar-logout-link">
+                                Logout
+                            </a>
+                        </div>
+
+                    </div>
+                    {% else %}
+                    <a href="{% url 'dashboard:login' %}?next={{ request.get_full_path|urlencode }}"
+                        class="navbar-login-icon" title="Login / Register">
+                        <img src="{% static 'icons/profile-icon.png' %}" alt="Login">
+                    </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+        <div class="message-wrapper">
+            {% for message in messages %}
+            <div class="site-message {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% block extra_js %}
+    {% endblock %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchForm = document.getElementById("globalSearchForm");
+            const searchInput = document.getElementById("globalSearchInput");
+
+            if (!searchForm || !searchInput) return;
+
+            let searchTimer = null;
+
+            searchInput.addEventListener("input", function () {
+                clearTimeout(searchTimer);
+
+                searchTimer = setTimeout(function () {
+                    searchForm.submit();
+                }, 500);
+            });
+
+            searchInput.addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    clearTimeout(searchTimer);
+                    searchForm.submit();
+                }
+            });
+        });
+    </script>
+
+    {% include 'dashboard/footer.html' %}
+
+</body>
+</html>

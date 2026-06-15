@@ -1,0 +1,406 @@
+/* dashboard/static/css/subscribe_banner.css */
+
+/* =========================================================
+   SUBSCRIBE / BEAUTY CIRCLE BANNER
+========================================================= */
+
+.subscribe-banner {
+    width: 78%;
+    margin: 60px auto 20px auto;
+    min-height: 215px;
+    display: grid;
+    grid-template-columns: 1fr 1.35fr; /* image + form */
+    align-items: center;
+    background: linear-gradient(135deg, #f8a8c8 0%, #f72585 100%);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(247, 37, 133, 0.22);
+}
+
+/* LEFT IMAGE AREA */
+.subscribe-image {
+    height: 100%;
+    display: flex;
+    align-items: center; /* center vertically */
+    justify-content: center; /* center horizontally */
+    position: relative;
+}
+
+.subscribe-image img {
+    max-width: 100%;
+    max-height: 230px;
+    object-fit: contain;
+    object-position: center bottom;
+    display: block;
+}
+
+/* RIGHT CONTENT AREA */
+.subscribe-content {
+    text-align: center;
+    color: #ffffff;
+    padding: 30px 48px;
+}
+
+.subscribe-content h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+}
+
+.subscribe-content p {
+    max-width: 440px;
+    margin: 0 auto 18px auto;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #ffffff;
+}
+
+/* FORM */
+.subscribe-form {
+    display: flex;
+    flex-direction: row; /* horizontal form now */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.subscribe-form input[type="email"] {
+    width: 250px;
+    max-width: 100%;
+    padding: 12px 18px;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+    font-size: 14px;
+    background: #ffffff;
+    color: #2E2E2E;
+}
+
+.subscribe-form input[type="email"]::placeholder {
+    color: #9b9b9b;
+}
+
+.subscribe-form button {
+    width: 140px;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #2E2E2E;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
+    transition: 0.25s ease;
+}
+
+.subscribe-form button:hover {
+    background: #f6f6f6;
+    transform: translateY(-1px);
+}
+
+/* MESSAGE STYLE OPTIONAL */
+.subscribe-message {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #ffffff;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+    .subscribe-banner {
+        width: 90%;
+    }
+}
+
+@media (max-width: 900px) {
+    .subscribe-banner {
+        width: 100%;
+        grid-template-columns: 1fr;
+        margin: 45px auto 15px auto;
+        min-height: 180px;
+    }
+
+    .subscribe-image img {
+        height: 180px;
+    }
+
+    .subscribe-content {
+        padding: 25px 22px 30px;
+    }
+
+    .subscribe-content h2 {
+        font-size: 21px;
+    }
+
+    .subscribe-content p {
+        font-size: 12px;
+    }
+
+    .subscribe-form {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .subscribe-form input[type="email"] {
+        width: 90%;
+    }
+
+    .subscribe-form button {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    .subscribe-banner {
+        border-radius: 8px;
+        margin: 35px auto 15px auto;
+    }
+
+    .subscribe-form input[type="email"] {
+        width: 100%;
+    }
+
+    .subscribe-form button {
+        width: 80%;
+    }
+}
+whislist.css
+
+
+.wishlist-page {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 25px 20px;
+}
+
+.wishlist-container {
+    width: 100%;
+}
+
+.wishlist-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.wishlist-header h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    color: #111111;
+    margin: 0 0 8px;
+}
+
+.wishlist-subtitle {
+    text-align: center;
+    color: #555555;
+    margin: 0;
+    font-size: 15px;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.wishlist-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(247, 37, 133, 0.16);
+    border: 1px solid #ffe0ec;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(247, 37, 133, 0.22);
+}
+
+.wishlist-image-box {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fbfbfb;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.wishlist-card img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+.wishlist-no-image {
+    color: #777777;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.wishlist-card-content h4 {
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.wishlist-brand {
+    color: #777777;
+    font-size: 13px;
+    margin: 0 0 8px;
+}
+
+.wishlist-desc {
+    color: #333333;
+    font-size: 13px;
+    line-height: 1.4;
+    min-height: 38px;
+    margin: 0 0 10px;
+}
+
+.wishlist-price {
+    color: #F72585;
+    font-weight: 700;
+    margin: 10px 0 8px;
+    font-size: 16px;
+}
+
+.wishlist-rating {
+    color: #333333;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.wishlist-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.wishlist-actions form {
+    margin: 0;
+}
+
+.wishlist-cart-btn,
+.wishlist-remove-btn,
+.continue-shopping-btn {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Poppins', sans-serif;
+}
+
+.wishlist-cart-btn {
+    background: #F72585;
+    color: #ffffff;
+}
+
+.wishlist-cart-btn:hover {
+    background: #d9166d;
+}
+
+.wishlist-remove-btn {
+    background: #222222;
+    color: #ffffff;
+}
+
+.wishlist-remove-btn:hover {
+    background: #000000;
+}
+
+.empty-wishlist {
+    text-align: center;
+    color: #555555;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 65px 20px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #ffe0ec;
+    box-shadow: 0 4px 16px rgba(247, 37, 133, 0.12);
+}
+
+.empty-wishlist-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    border: 2px solid #F72585;
+    color: #F72585;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    line-height: 1;
+}
+
+.empty-wishlist h3 {
+    color: #111111;
+    font-family: 'Poppins', sans-serif;
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+
+.empty-wishlist p {
+    max-width: 460px;
+    margin: 0 auto 20px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.continue-shopping-btn {
+    background: #F72585;
+    color: #ffffff;
+    margin-top: 5px;
+}
+
+.continue-shopping-btn:hover {
+    background: #d9166d;
+}
+
+@media (max-width: 992px) {
+    .wishlist-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .wishlist-page {
+        padding: 20px 15px;
+    }
+
+    .wishlist-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wishlist-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .wishlist-actions form,
+    .wishlist-cart-btn,
+    .wishlist-remove-btn {
+        width: 100%;
+    }
+
+    .wishlist-cart-btn,
+    .wishlist-remove-btn {
+        box-sizing: border-box;
+    }
+}
