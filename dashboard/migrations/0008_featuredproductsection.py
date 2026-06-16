@@ -1,6 +1,3 @@
-# Generated manually to create FeaturedProductSection table
-# Generated manually to safely create FeaturedProductSection table
-
 from django.db import migrations, models
 
 
@@ -40,5 +37,4 @@ class Migration(migrations.Migration):
             ],
         ),
     ]
-
         
