@@ -163,11 +163,15 @@ SEARCH_RESULTS_PER_PAGE = 12
 # =========================================================
 # CASHFREE PAYMENT SETTINGS
 # =========================================================
-CASHFREE_ENV = os.getenv("CASHFREE_ENV", "SANDBOX")
-CASHFREE_CLIENT_ID = os.getenv("CASHFREE_CLIENT_ID")
-CASHFREE_CLIENT_SECRET = os.getenv("CASHFREE_CLIENT_SECRET")
+CASHFREE_ENV = os.getenv("CASHFREE_ENV", "sandbox").strip().lower()
+CASHFREE_CLIENT_ID = os.getenv("CASHFREE_CLIENT_ID", "").strip()
+CASHFREE_CLIENT_SECRET = os.getenv("CASHFREE_CLIENT_SECRET", "").strip()
 CASHFREE_API_VERSION = "2025-01-01"
-CASHFREE_BASE_URL = "https://sandbox.cashfree.com/pg" if CASHFREE_ENV == "SANDBOX" else "https://api.cashfree.com/pg"
+
+if CASHFREE_ENV == "production":
+    CASHFREE_BASE_URL = "https://api.cashfree.com/pg"
+else:
+    CASHFREE_BASE_URL = "https://sandbox.cashfree.com/pg"
 
 # =========================================================
 # ADDITIONAL SETTINGS
