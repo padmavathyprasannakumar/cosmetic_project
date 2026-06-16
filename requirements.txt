@@ -11,3 +11,4 @@ django-js-asset==3.1.2
 django-crispy-forms==2.6
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
+dj-database-url
