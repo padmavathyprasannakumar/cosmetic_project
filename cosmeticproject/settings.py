@@ -18,11 +18,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================================================
 SECRET_KEY = 'django-insecure-&uve@8!l=)5x-byqftm3fodwg_c)biq*ge42-&=8t)^5mr&mkk'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+    'cosmetic-project-2.onrender.com',
+    '.onrender.com',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://cosmetic-project-2.onrender.com',
 ]
 
 # =========================================================
