@@ -2388,6 +2388,8 @@ def about(request):
     return render(request, "dashboard/about.html", context)
 
 
+
+
 # =========================================================
 # CONTACT PAGE
 # =========================================================
@@ -2438,7 +2440,7 @@ def contact(request):
             message=user_message,
         )
 
-        receiver_email = "padmavathyprasanna4@gmail.com"
+        receiver_email = settings.CONTACT_RECEIVER_EMAIL
 
         if contact_service and contact_service.service_email:
             receiver_email = contact_service.service_email
@@ -2457,13 +2459,43 @@ Message:
 """
 
         try:
-            send_mail(
-                subject=subject,
-                message=email_body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[receiver_email],
-                fail_silently=False,
+            if not settings.BREVO_API_KEY:
+                raise Exception("BREVO_API_KEY is missing in Render Environment Variables")
+
+            if not settings.BREVO_SENDER_EMAIL:
+                raise Exception("BREVO_SENDER_EMAIL is missing in Render Environment Variables")
+
+            payload = {
+                "sender": {
+                    "name": settings.BREVO_SENDER_NAME,
+                    "email": settings.BREVO_SENDER_EMAIL,
+                },
+                "to": [
+                    {
+                        "email": receiver_email,
+                    }
+                ],
+                "replyTo": {
+                    "email": email,
+                    "name": full_name,
+                },
+                "subject": subject,
+                "textContent": email_body,
+            }
+
+            response = requests.post(
+                "https://api.brevo.com/v3/smtp/email",
+                headers={
+                    "accept": "application/json",
+                    "api-key": settings.BREVO_API_KEY,
+                    "content-type": "application/json",
+                },
+                json=payload,
+                timeout=15,
             )
+
+            if response.status_code >= 300:
+                raise Exception(f"Brevo error {response.status_code}: {response.text}")
 
             messages.success(request, "Your message has been sent successfully.")
 
