@@ -2459,14 +2459,14 @@ Message:
         try:
             connection = get_connection(timeout=10)
 
-    email_message = EmailMessage(
-        subject=subject,
-        body=email_body,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[receiver_email],
-        reply_to=[email],
-        connection=connection,
-    )
+            email_message = EmailMessage(
+                subject=subject,
+                body=email_body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[receiver_email],
+                reply_to=[email],
+                connection=connection,
+            )
 
     email_message.send(fail_silently=False)
 
