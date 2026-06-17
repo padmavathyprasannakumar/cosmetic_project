@@ -85,29 +85,6 @@ from .models import (
 
     UserProfile
 )
-try:
-    connection = get_connection(timeout=10)
-
-    email_message = EmailMessage(
-        subject=subject,
-        body=email_body,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[receiver_email],
-        reply_to=[email],
-        connection=connection,
-    )
-
-    email_message.send(fail_silently=False)
-
-    messages.success(request, "Your message has been sent successfully.")
-
-except BaseException as e:
-    print("Email sending error:", repr(e))
-
-    messages.error(
-        request,
-        "Your message was saved, but email could not be sent. Please check email settings."
-    )
 
 # =========================================================
 # CASHFREE PAYMENT HELPERS
@@ -2480,21 +2457,28 @@ Message:
 """
 
         try:
-            send_mail(
-                subject=subject,
-                message=email_body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[receiver_email],
-                fail_silently=False,
-            )
+            connection = get_connection(timeout=10)
 
-            messages.success(request, "Your message has been sent successfully.")
+    email_message = EmailMessage(
+        subject=subject,
+        body=email_body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[receiver_email],
+        reply_to=[email],
+        connection=connection,
+    )
 
-        except Exception:
-            messages.error(
-                request,
-                "Your message was saved, but email could not be sent. Please check email settings."
-            )
+    email_message.send(fail_silently=False)
+
+    messages.success(request, "Your message has been sent successfully.")
+
+except BaseException as e:
+    print("Email sending error:", repr(e))
+
+    messages.error(
+        request,
+        "Your message was saved, but email could not be sent. Please check email settings."
+    )
 
         return redirect("dashboard:contact")
 
