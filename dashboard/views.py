@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.mail import EmailMessage, get_connection
+from django.core.mail import send_mail
 from django.db.models import Q, Sum, Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
@@ -2457,28 +2457,23 @@ Message:
 """
 
         try:
-            connection = get_connection(timeout=10)
-
-            email_message = EmailMessage(
+            send_mail(
                 subject=subject,
-                body=email_body,
+                message=email_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[receiver_email],
-                reply_to=[email],
-                connection=connection,
+                recipient_list=[receiver_email],
+                fail_silently=False,
             )
 
-    email_message.send(fail_silently=False)
+            messages.success(request, "Your message has been sent successfully.")
 
-    messages.success(request, "Your message has been sent successfully.")
+        except Exception as e:
+            print("Email sending error:", repr(e))
 
-except BaseException as e:
-    print("Email sending error:", repr(e))
-
-    messages.error(
-        request,
-        "Your message was saved, but email could not be sent. Please check email settings."
-    )
+            messages.error(
+                request,
+                "Your message was saved, but email could not be sent. Please check email settings."
+            )
 
         return redirect("dashboard:contact")
 
