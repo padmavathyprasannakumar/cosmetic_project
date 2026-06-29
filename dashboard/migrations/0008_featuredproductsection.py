@@ -8,33 +8,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.SeparateDatabaseAndState(
-            database_operations=[
-                migrations.RunSQL(
-                    sql="""
-                    CREATE TABLE IF NOT EXISTS dashboard_featuredproductsection (
-                        id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-                        heading varchar(150) NOT NULL,
-                        is_active bool NOT NULL
-                    );
-                    """,
-                    reverse_sql="DROP TABLE IF EXISTS dashboard_featuredproductsection;",
-                ),
+        migrations.CreateModel(
+            name='FeaturedProductSection',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('heading', models.CharField(default='Featured Products', max_length=150)),
+                ('is_active', models.BooleanField(default=True)),
             ],
-            state_operations=[
-                migrations.CreateModel(
-                    name='FeaturedProductSection',
-                    fields=[
-                        ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('heading', models.CharField(default='Featured Products', max_length=150)),
-                        ('is_active', models.BooleanField(default=True)),
-                    ],
-                    options={
-                        'verbose_name': 'Featured Product Section',
-                        'verbose_name_plural': 'Featured Product Section',
-                    },
-                ),
-            ],
+            options={
+                'verbose_name': 'Featured Product Section',
+                'verbose_name_plural': 'Featured Product Section',
+            },
         ),
     ]
-        
