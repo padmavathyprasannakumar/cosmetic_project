@@ -13,8 +13,8 @@ class HomeFlashSaleSection(models.Model):
     quote_text = models.CharField(max_length=200, default="Glow Confidently every Day")
     button_text = models.CharField(max_length=50, default="Shop Now")
 
-    left_image = models.ImageField(upload_to="home_flash_sale/", blank=True, null=True)
-    right_image = models.ImageField(upload_to="home_flash_sale/", blank=True, null=True)
+    left_image = models.ImageField(max_length=500, upload_to="home_flash_sale/", blank=True, null=True)
+    right_image = models.ImageField(max_length=500, upload_to="home_flash_sale/", blank=True, null=True)
 
     # Use your existing category/page model here
     # Example:
@@ -52,7 +52,7 @@ class NavbarLink(models.Model):
         help_text="Example: /, /offers/, /about/, /contact/. Use # for Shop dropdown."
     )
 
-    icon = models.ImageField(
+    icon = models.ImageField(max_length=500, 
         upload_to="navbar_icons/",
         null=True,
         blank=True
@@ -326,7 +326,7 @@ class Product(models.Model):
         related_name="products",
     )
 
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="products/",
         null=True,
         blank=True
@@ -667,7 +667,7 @@ class WishlistItem(models.Model):
 # =========================================================
 
 class SiteLogo(models.Model):
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="site_logo/",
         null=True,
         blank=True
@@ -684,7 +684,7 @@ class SiteLogo(models.Model):
 # =========================================================
 
 class Banner(models.Model):
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="banners/",
         null=True,
         blank=True
@@ -719,8 +719,8 @@ class HomeContent(models.Model):
     heading = models.CharField(max_length=255)
     content_text = models.TextField()
 
-    left_image = models.ImageField(upload_to="images/")
-    right_image = models.ImageField(upload_to="images/")
+    left_image = models.ImageField(max_length=500, upload_to="images/")
+    right_image = models.ImageField(max_length=500, upload_to="images/")
 
     is_active = models.BooleanField(default=True)
 
@@ -762,7 +762,7 @@ class PerformanceIngredient(models.Model):
         blank=True
     )
 
-    image = models.ImageField(upload_to="performance_ingredients/")
+    image = models.ImageField(max_length=500, upload_to="performance_ingredients/")
     title = models.CharField(max_length=150)
     description = models.CharField(max_length=255)
 
@@ -838,7 +838,7 @@ class PaymentMethod(models.Model):
         help_text="Example: credit-card, net-banking, upi"
     )
 
-    icon_image = models.ImageField(
+    icon_image = models.ImageField(max_length=500, 
         upload_to="payment_icons/",
         null=True,
         blank=True,
@@ -1070,7 +1070,7 @@ class OrderItem(models.Model):
 # =========================================================
 
 class SubscribeBanner(models.Model):
-    left_image = models.ImageField(
+    left_image = models.ImageField(max_length=500, 
         upload_to="subscribe_banner/",
         blank=True,
         null=True,
@@ -1140,7 +1140,7 @@ class AboutHero(models.Model):
         null=True
     )
 
-    background_image = models.ImageField(
+    background_image = models.ImageField(max_length=500, 
         upload_to="about/",
         blank=True,
         null=True
@@ -1181,7 +1181,7 @@ class AboutStorySection(models.Model):
         null=True
     )
 
-    side_image = models.ImageField(
+    side_image = models.ImageField(max_length=500, 
         upload_to="about/story/",
         blank=True,
         null=True
@@ -1227,7 +1227,7 @@ class AboutCoreValueCard(models.Model):
         null=True
     )
 
-    icon = models.ImageField(
+    icon = models.ImageField(max_length=500, 
         upload_to="about/core-values/icons/",
         blank=True,
         null=True
@@ -1261,13 +1261,15 @@ class AboutCoreValueCard(models.Model):
 
 class AboutFounderSection(models.Model):
     image = models.ImageField(
+        max_length=500,
         upload_to="about/founder/",
         blank=True,
-        null=True
+        null=True,
+        help_text="Upload founder image. Increased max_length to support long Cloudinary file paths."
     )
 
     title = models.CharField(
-        max_length=150,
+        max_length=255,
         blank=True,
         null=True
     )
@@ -1344,7 +1346,7 @@ class ContactHero(models.Model):
         null=True
     )
 
-    background_image = models.ImageField(
+    background_image = models.ImageField(max_length=500, 
         upload_to="contact/",
         blank=True,
         null=True
@@ -1541,7 +1543,7 @@ class TopCategoryCard(models.Model):
         help_text="Select category page. Shop Now will navigate to this category."
     )
 
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="top_categories/"
     )
 
@@ -1592,7 +1594,7 @@ class WhyGlowifySection(models.Model):
         default="Why Glowify"
     )
 
-    main_image = models.ImageField(
+    main_image = models.ImageField(max_length=500, 
         upload_to="why_glowify/",
         help_text="Left side girl/product image"
     )
@@ -1676,7 +1678,7 @@ class HappyCustomerReview(models.Model):
         blank=True
     )
 
-    customer_image = models.ImageField(
+    customer_image = models.ImageField(max_length=500, 
         upload_to="happy_customers/",
         help_text="Customer profile image"
     )
@@ -1731,7 +1733,7 @@ class HappyCustomerReview(models.Model):
 # =========================================================
 
 class OfferBanner(models.Model):
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="offers/banners/",
         help_text="Upload full offer banner image"
     )
@@ -1784,7 +1786,7 @@ class OfferSection(models.Model):
 # =========================================================
 
 class OfferProduct(models.Model):
-    image = models.ImageField(
+    image = models.ImageField(max_length=500, 
         upload_to="offers/products/",
         help_text="Upload offer product image"
     )
@@ -1868,7 +1870,7 @@ class ExclusiveOffer(models.Model):
         related_name="exclusive_offers"
     )
 
-    offer_image = models.ImageField(
+    offer_image = models.ImageField(max_length=500, 
         upload_to="exclusive_offers/",
         blank=True,
         null=True,
@@ -1930,7 +1932,7 @@ class ExclusiveOffer(models.Model):
 
 
 class FooterSetting(models.Model):
-    logo = models.ImageField(upload_to="footer/logo/", blank=True, null=True)
+    logo = models.ImageField(max_length=500, upload_to="footer/logo/", blank=True, null=True)
 
     address = models.TextField(
         default="3rd Floor, Valasaravakam,\nChennai - 600800"
